@@ -85,10 +85,10 @@ Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
 relacyjnej bazy danych MySQL.
 
 %package backend-ldap
-Summary:        PowerDNS support for LDAP
-Summary(pl):    Wsparcie PowerDNS dla baz LDAP
-Group:          Development/Libraries
-Requires:       openldap
+Summary:	PowerDNS support for LDAP
+Summary(pl):	Wsparcie PowerDNS dla baz LDAP
+Group:		Development/Libraries
+Requires:	openldap
 
 %description backend-ldap
 This package allows zone storage in LDAP directory.
@@ -186,7 +186,7 @@ fi
 %doc ChangeLog HACKING INSTALL README TODO WARNING pdns.pdf pdns.txt
 %config(noreplace) %attr(0600,root,root) %{_sysconfdir}/%{name}/%{name}.conf
 %config(noreplace) %attr(0754,root,root) %{_initrddir}/%{name}
-%attr(640,root,root)  %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pdns
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pdns
 %dir %{_sysconfdir}/%{name}
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/*
