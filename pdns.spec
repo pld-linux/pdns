@@ -1,5 +1,5 @@
 %define name		pdns
-%define version		2.9.4
+%define version		2.9.5
 %define release		1
 
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
@@ -123,7 +123,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR="%{buildroot}" 
 
-install -d %{buildroot}/html
 install -d %{buildroot}/%{_initrddir}
 install -d %{buildroot}/%{_sysconfdir}/%{name}
 install -d %{buildroot}/etc/sysconfig
