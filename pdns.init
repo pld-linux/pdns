@@ -38,7 +38,7 @@ fi
 pdns_server="/usr/sbin/pdns_server $EXTRAOPTS"
 
 doPC() {
-	ret=$(/usr/sbin/pdns_control $EXTRAOPTS $1 $2 2> /dev/null)
+	ret=$(/usr/bin/pdns_control $EXTRAOPTS $1 $2 2> /dev/null)
 }
 
 doPC ping
