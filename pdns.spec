@@ -1,6 +1,6 @@
 %define name		pdns
 %define version		2.9.4
-%define release		0.1
+%define release		1
 
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj±cy z relacyjnych baz danych
@@ -14,6 +14,7 @@ Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
 Source2:	%{name}.init
 Source3:	%{name}.conf
+Source4:	%{name}.sysconfig
 
 BuildRequires:	bison
 BuildRequires:	flex
@@ -122,9 +123,10 @@ rm -rf $RPM_BUILD_ROOT
 install -d %{buildroot}/%{_docdir}/%{name}-%{version}
 install -d %{buildroot}/%{_initrddir}
 install -d %{buildroot}/%{_sysconfdir}/%{name}
-install -m644 %{SOURCE1} %{buildroot}/%{_docdir}/%{name}-%{version}/%{name}.pdf
-install -m754 %{SOURCE2} %{buildroot}/%{_initrddir}/%{name}
-install -m600 %{SOURCE3} %{buildroot}/%{_sysconfdir}/%{name}/%{name}.conf
+install %{SOURCE1} %{buildroot}/%{_docdir}/%{name}-%{version}/%{name}.pdf
+install %{SOURCE2} %{buildroot}/%{_initrddir}/%{name}
+install %{SOURCE3} %{buildroot}/%{_sysconfdir}/%{name}/%{name}.conf
+install %{SOURCE3} %{buildroot}/etc/sysconfig/pdns
 
 %pre
 if [ -n "`getgid djbdns`" ]; then
@@ -161,8 +163,10 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc ChangeLog HACKING INSTALL README TODO WARNING 
+%{_docdir}/%{name}-%{version}/%{name}.pdf
 %config(noreplace) %attr(0600,root,root) %{_sysconfdir}/%{name}/%{name}.conf
 %config(noreplace) %attr(0754,root,root) %{_initrddir}/%{name}
+%attr(640,root,root)  %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pdns
 %dir %{_sysconfdir}/%{name}
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man8/*

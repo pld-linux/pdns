@@ -14,7 +14,7 @@
 
 # Check that networking is up.
 if is_no "${NETWORKING}"; then
-        msg_network_down "pdns"
+        msg_network_down "PowerDNS"
         exit 1
 fi
 
@@ -38,11 +38,6 @@ doPC() {
     ret=$(/usr/sbin/pdns_control $EXTRAOPTS $1 $2 2> /dev/null)
 }
 
-if [ "$1" != "mrtg" -a "$1" != "cricket" ] 
-then
-	echo -n "$PROGNAME: "
-fi
-
 doPC ping
 NOTRUNNING=$?
 
@@ -53,52 +48,54 @@ case "$1" in
 			doPC status
 			echo $ret
 		else
-			echo "not running"
+			msg_not_running "PowerDNS"
 		fi 
 	;;	
 
 	stop)
 		if test "$NOTRUNNING" = "0" 
 		then 
-			doPC quit
-			echo $ret
+			msg_stopping "pdns"
+			doPC quit 2>&1 >/dev/null
+			[ $? ] && ok || fail
+			rm /var/lock/subsys/pdns
 		else
-			echo "not running"
+			msg_not_running "PowerDNS"
 		fi 
 	;;		
 
 	force-stop)
-		killall -v -9 pdns_server
+		run_cmd "Killing PowerDNS without grace" killall -v -9 pdns_server
 	;;
 
 	start)
 		if test "$NOTRUNNING" = "0" 
 		then 
-			echo "already running"
+			msg_already_running "PowerDNS"
+			exit 1
+
 		else
-			$pdns_server --daemon --guardian=yes
-			if test "$?" = "0"
-			then
-				echo "started"	
-			fi
+			msg_starting "PowerDNS (Powered DNS server)"
+			daemon $pdns_server --daemon --guardian=yes
+			RETVAL=$?
+			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pdns
 		fi 
 	;;		
 
 	force-reload | restart)
-		echo -n stopping and waiting
-		doPC quit
-		sleep 3
-		echo 
+		$0 stop
+		run_cmd "PowerDNS (3 sec. timeout)" sleep 3
 		$0 start
 	;;
 
 	reload) 
 		if test "$NOTRUNNING" = "0" 
 		then 
-			doPC cycle
-			echo requested reload
+			show "Reloading PowerDNS"
+			doPC cycle 2>&1 >/dev/null
+			[ $? ] && ok || fail
 		else
-			echo not running yet
+			msg_not_running "PowerDNS"
 			$0 start
 		fi 
 	;;		
@@ -106,8 +103,9 @@ case "$1" in
 	monitor)
 		if test "$NOTRUNNING" = "0" 
 		then 
-			echo "already running"
+			msg_already_running "PowerDNS"
 		else
+			show "PowerDNS in foreground (testing mode)"
 			$pdns_server --daemon=no --guardian=no --control-console --loglevel=9
 		fi 
 	;;		
@@ -118,30 +116,30 @@ case "$1" in
 			doPC list
 			echo $ret
 		else
-			echo "not running"
+			msg_not_running "PowerDNS"
 		fi 
 	;;		
 
 	show)
 		if [ $# -lt 2 ]
 		then
-			echo Insufficient parameters
-			exit
+			msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
+			exit 1
 		fi 
 		if test "$NOTRUNNING" = "0" 
 		then 
 			echo -n "$2="
 			doPC show $2 ; echo $ret
 		else
-			echo "not running"
+			msg_not_running "PowerDNS"
 		fi 
 	;;		
 
 	mrtg)
 		if [ $# -lt 2 ]
 		then
-			echo Insufficient parameters
-			exit
+			msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
+			exit 1
 		fi 
 		if test "$NOTRUNNING" = "0" 
 		then 
@@ -155,31 +153,28 @@ case "$1" in
 			doPC uptime ; echo $ret
 			echo PowerDNS daemon
 		else
-			echo "not running"
+			msg_not_running "PowerDNS"
 		fi 
-	
 	;;		
 
 	cricket)
 		if [ $# -lt 2 ]
 		then
-			echo Insufficient parameters
-			exit
+			msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
+			exit 1
 		fi 
 		if test "$NOTRUNNING" = "0" 
 		then 
 			doPC show $2 ; echo $ret
 		else
-			echo "not running"
+			msg_not_running "PowerDNS"
 		fi 
-	
 	;;		
 
 
 
 	*)
-	echo pdns [start\|stop\|force-reload\|restart\|status\|dump\|show\|mrtg\|cricket\|monitor]
-
+	msg_usage "$0 {start|stop|reload|force-reload|restart|status|dump|show|mrtg|cricket|monitor} [...]"
 	;;
 esac
 
