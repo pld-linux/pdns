@@ -1,5 +1,5 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
-Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj±cy z relacyjnych baz danych
+Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj¹cy z relacyjnych baz danych
 Name:		pdns
 Version:	2.9.13
 Release:	1
@@ -38,10 +38,10 @@ different backends ranging from simple zonefiles to relational
 databases and load balancing/failover algorithms.
 
 %description -l pl
-PowerDNS to wielofunkcyjny serwer nazw posiadaj±cy du¿± liczbê wtyczek
-od prostych stref (a'la BIND) pocz±wszy, a na relacyjnych bazach
-danych skoñczywszy oraz zawieraj±cy algorytmy zrównowa¿enia obci±¿enia
-i prze³±czania w wypadku awarii.
+PowerDNS to wielofunkcyjny serwer nazw posiadaj¹cy du¿¹ liczbê wtyczek
+od prostych stref (a'la BIND) pocz¹wszy, a na relacyjnych bazach
+danych skoñczywszy oraz zawieraj¹cy algorytmy zrównowa¿enia obci¹¿enia
+i prze³¹czania w wypadku awarii.
 
 %package backend-pipe
 Summary:	PowerDNS support for custom pipe backend
@@ -55,34 +55,46 @@ documentation.
 
 %description backend-pipe -l pl
 Ten pakiet pozwala na utworzenie w³asnego mechanizmu przechowywania
-stref za pomoc± prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w
-perlu zosta³ do³±czony do dokumentacji pakietu.
+stref za pomoc¹ prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w
+perlu zosta³ do³¹czony do dokumentacji pakietu.
 
-%package backend-pgsql
+%package backend-gpgsql
 Summary:	PowerDNS support for PostgreSQL
 Summary(pl):	Wsparcie PowerDNS dla baz PostgresQL
 Group:		Development/Libraries
 Requires:	postgresql
 
-%description backend-pgsql
+%description backend-gpgsql
 This package allows zone storage in PostgreSQL relational db tables.
 
-%description backend-pgsql -l pl
+%description backend-gpgsql -l pl
 Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
 relacyjnej bazy danych PostgreSQL.
 
-%package backend-mysql
+%package backend-gmysql
 Summary:	PowerDNS support for MySQL
 Summary(pl):	Wsparcie PowerDNS dla baz MySQL
 Group:		Development/Libraries
 Requires:	mysql
 
-%description backend-mysql
+%description backend-gmysql
 This package allows zone storage in MySQL relational db tables.
 
-%description backend-mysql -l pl
+%description backend-gmysql -l pl
 Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
 relacyjnej bazy danych MySQL.
+
+%package backend-ldap
+Summary:        PowerDNS support for LDAP
+Summary(pl):    Wsparcie PowerDNS dla baz LDAP
+Group:          Development/Libraries
+Requires:       openldap
+
+%description backend-ldap
+This package allows zone storage in LDAP directory.
+
+%description backend-ldap -l pl
+Ten pakiet pozwala na przechowywanie danych o strefach w katalogu LDAP.
 
 %prep
 %setup -q
@@ -95,11 +107,12 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 	--libdir=%{_libdir}/%{name} \
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--with-socketdir=/var/run \
-	--with-dynmodules="gmysql gpgsql pipe" \
+	--with-dynmodules="gmysql gpgsql pipe ldap" \
 	--with-modules="" \
 	--with-pgsql-includes=%{_includedir} \
 	--enable-mysql \
 	--enable-pgsql \
+	--enable-ldap \
 	--disable-static
 
 %{__make}
@@ -171,14 +184,18 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %{_mandir}/man8/*
 
-%files backend-mysql
+%files backend-gmysql
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*mysql*.so*
 
-%files backend-pgsql
+%files backend-gpgsql
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*pgsql*.so*
 
 %files backend-pipe
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*pipe*.so*
+
+%files backend-ldap
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/%{name}/*ldap*.so*
