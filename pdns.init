@@ -84,10 +84,15 @@ case "$1" in
 	if test "$NOTRUNNING" = "0"; then 
 		show "Reloading PowerDNS"
 		doPC cycle 2>&1 >/dev/null
-		[ $? -eq 0 ] && ok || fail
+		if [ $? -eq 0 ]; then
+			ok
+		else
+			fail
+			RETVAL=1
+		fi
 	else
-		msg_not_running "PowerDNS"
-		$0 start
+		msg_not_running "PowerDNS" >&2
+		exit 7
 	fi
 	;;		
   monitor)
@@ -109,7 +114,7 @@ case "$1" in
   show)
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
-		exit 1
+		exit 2
 	fi 
 	if test "$NOTRUNNING" = "0"; then 
 		echo -n "$2="
@@ -121,7 +126,7 @@ case "$1" in
   mrtg)
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
-		exit 1
+		exit 2
 	fi 
 	if test "$NOTRUNNING" = "0"; then 
 		doPC show $2 ; echo $ret
@@ -133,20 +138,20 @@ case "$1" in
 		doPC uptime ; echo $ret
 		echo PowerDNS daemon
 	else
-		msg_not_running "PowerDNS"
-		exit 1
+		msg_not_running "PowerDNS" >&2
+		exit 7
 	fi 
 	;;		
   cricket)
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
-		exit 1
+		exit 2
 	fi 
 	if test "$NOTRUNNING" = "0"; then 
 		doPC show $2 ; echo $ret
 	else
-		msg_not_running "PowerDNS"
-		exit 1
+		msg_not_running "PowerDNS" >&2
+		exit 7
 	fi 
 	;;		
   *)
