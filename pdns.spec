@@ -12,9 +12,10 @@ Group:		Networking/Daemons
 URL:		http://www.powerdns.com/
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
-Source2:	%{name}.init
-Source3:	%{name}.conf
-Source4:	%{name}.sysconfig
+Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
+Source3:	%{name}.init
+Source4:	%{name}.conf
+Source5:	%{name}.sysconfig
 
 BuildRequires:	bison
 BuildRequires:	flex
@@ -95,7 +96,9 @@ Statyczne biblioteki PowerDNS.
 
 %prep
 
-%setup -q 
+%setup -q
+cp %{SOURCE1} .
+cp %{SOURCE2} .
 
 %build
 
@@ -120,14 +123,13 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR="%{buildroot}" 
 
-install -d %{buildroot}/%{_docdir}/%{name}-%{version}
+install -d %{buildroot}/html
 install -d %{buildroot}/%{_initrddir}
 install -d %{buildroot}/%{_sysconfdir}/%{name}
 install -d %{buildroot}/etc/sysconfig
-install %{SOURCE1} %{buildroot}/%{_docdir}/%{name}-%{version}/%{name}.pdf
-install %{SOURCE2} %{buildroot}/%{_initrddir}/%{name}
-install %{SOURCE3} %{buildroot}/%{_sysconfdir}/%{name}/%{name}.conf
-install %{SOURCE4} %{buildroot}/etc/sysconfig/pdns
+install %{SOURCE3} %{buildroot}/%{_initrddir}/%{name}
+install %{SOURCE4} %{buildroot}/%{_sysconfdir}/%{name}/%{name}.conf
+install %{SOURCE5} %{buildroot}/etc/sysconfig/pdns
 
 %pre
 if [ -n "`getgid djbdns`" ]; then
@@ -149,9 +151,19 @@ fi
 
 %post
 /sbin/chkconfig --add pdns
+if [ -f %{_localstatedir}/lock/subsys/pdns ]; then
+	/etc/rc.d/init.d/pdns restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/pdns start\" to start pdns." >&2
+fi
 
 %preun
-/sbin/chkconfig --del pdns
+if [ "$1" = "0" ]; then
+	if [ -f %{_localstatedir}/lock/subsys/pdns ]; then
+		/etc/rc.d/init.d/pdns stop
+	fi
+	/sbin/chkconfig --del pdns
+fi
 
 %postun
 if [ "$1" = "0" ]; then
@@ -163,8 +175,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog HACKING INSTALL README TODO WARNING 
-%{_docdir}/%{name}-%{version}/%{name}.pdf
+%doc ChangeLog HACKING INSTALL README TODO WARNING pdns.pdf pdns.txt
 %config(noreplace) %attr(0600,root,root) %{_sysconfdir}/%{name}/%{name}.conf
 %config(noreplace) %attr(0754,root,root) %{_initrddir}/%{name}
 %attr(640,root,root)  %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pdns
@@ -173,15 +184,15 @@ fi
 %{_mandir}/man8/*
 
 %files backend-mysql
-%attr(755,root,root) %{_libdir}/%{name}/*mysql*.so
+%attr(755,root,root) %{_libdir}/%{name}/*mysql*.so*
 %attr(644,root,root) %{_libdir}/%{name}/*mysql*.la
 
 %files backend-pgsql
-%attr(755,root,root) %{_libdir}/%{name}/*pgsql*.so
+%attr(755,root,root) %{_libdir}/%{name}/*pgsql*.so*
 %attr(644,root,root) %{_libdir}/%{name}/*pgsql*.la
 
 %files backend-pipe
-%attr(755,root,root) %{_libdir}/%{name}/*pipe*.so
+%attr(755,root,root) %{_libdir}/%{name}/*pipe*.so*
 %attr(644,root,root) %{_libdir}/%{name}/*pipe*.la
 
 %files static
