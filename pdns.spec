@@ -8,7 +8,7 @@ Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	3465694b9638c29f19a25dd5b0a77559
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
-# Source1-md5:	0d71bf412024d04d6a0fca10f2714c22
+# Source1-md5:	d7adf31d793735251c416d6ef5075cfa
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
