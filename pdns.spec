@@ -123,10 +123,11 @@ rm -rf $RPM_BUILD_ROOT
 install -d %{buildroot}/%{_docdir}/%{name}-%{version}
 install -d %{buildroot}/%{_initrddir}
 install -d %{buildroot}/%{_sysconfdir}/%{name}
+install -d %{buildroot}/etc/sysconfig
 install %{SOURCE1} %{buildroot}/%{_docdir}/%{name}-%{version}/%{name}.pdf
 install %{SOURCE2} %{buildroot}/%{_initrddir}/%{name}
 install %{SOURCE3} %{buildroot}/%{_sysconfdir}/%{name}/%{name}.conf
-install %{SOURCE3} %{buildroot}/etc/sysconfig/pdns
+install %{SOURCE4} %{buildroot}/etc/sysconfig/pdns
 
 %pre
 if [ -n "`getgid djbdns`" ]; then
