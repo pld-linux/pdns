@@ -1,5 +1,5 @@
 %define name		pdns
-%define version		2.9.5
+%define version		2.9.6
 %define release		1
 
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
