@@ -20,16 +20,21 @@ BuildRequires:	flex
 BuildRequires:	libstdc++-devel
 BuildRequires:	libpq++-devel
 BuildRequires:	mysql-devel
-BuildRequires:	zlib-devel
 BuildRequires:	openldap-devel
+BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	zlib-devel
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
-Requires(pre):	/usr/sbin/useradd
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
 Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+Provides:	group(djbdns)
 Provides:	nameserver
+Provides:	user(pdns)
 Obsoletes:	powerdns
 
 %description
@@ -139,21 +144,21 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid djbdns`" ]; then
-	if [ "`getgid djbdns`" != "32" ]; then
+if [ -n "`/usr/bin/getgid djbdns`" ]; then
+	if [ "`/usr/bin/getgid djbdns`" != "32" ]; then
 		echo "Error: group djbdns doesn't have gid=32. Correct this before installing pdns." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 32 -r -f djbdns
+	/usr/sbin/groupadd -g 32 djbdns
 fi
-if [ -n "`id -u pdns 2>/dev/null`" ]; then
-	if [ "`id -u pdns`" != "30" ]; then
+if [ -n "`/bin/id -u pdns 2>/dev/null`" ]; then
+	if [ "`/bin/id -u pdns`" != "30" ]; then
 		echo "Error: user pdns doesn't have uid=30. Correct this before installing pdns." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 30 -r -d /var/lib/pdns -s /bin/false -c "pdns User" -g djbdns pdns 1>&2
+	/usr/sbin/useradd -u 30 -d /var/lib/pdns -s /bin/false -c "pdns User" -g djbdns pdns 1>&2
 fi
 
 %post
@@ -180,7 +185,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel pdns
+	%userremove pdns
+	%groupremove djbdns
 fi
 
 %files
