@@ -28,8 +28,6 @@ Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/userdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Provides:	nameserver
-Provides:	powerdns
-Obsoletes:	nameserver
 Obsoletes:	powerdns
 
 %description
