@@ -5,7 +5,6 @@ Version:	2.9.10
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
-URL:		http://www.powerdns.com/
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	a91f15c90f6551fb817cb708e29d5a37
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
@@ -14,21 +13,22 @@ Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
-
+URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	mysql-devel
-BuildRequires:	postgresql-c++-devel
+BuildRequires:	libpq++-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	mysql-devel
 BuildRequires:	zlib-devel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/bin/id
 Requires(postun):	/usr/sbin/userdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-Provides:	nameserver pdns powerdns
-Obsoletes:	nameserver pdns powerdns
+Provides:	nameserver
+Provides:	powerdns
+Obsoletes:	nameserver
+Obsoletes:	powerdns
 
 %description
 PowerDNS is a versatile nameserver which supports a large number of
@@ -81,52 +81,41 @@ This package allows zone storage in MySQL relational db tables.
 Ten pakiet pozwala na przechowywanie danych o strefach w tabelach 
 relacyjnej bazy danych MySQL.
 
-%package static
-Summary:	PowerDNS static libs
-Summary(pl):	Biblioteki statyczne PowerDNS
-Group:		Development/Libraries
-
-%description static
-Static PowerDNS libraries.
-
-%description static -l pl
-Statyczne biblioteki PowerDNS.
-
 %prep
-
 %setup -q
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 
 %build
-
 %configure \
-    --libexecdir=%{_libexecdir} \
-    --libdir=%{_libdir}/%{name} \
-    --bindir=%{_sbindir} \
-    --sbindir=%{_sbindir} \
-    --sysconfdir=%{_sysconfdir}/%{name} \
-    --with-socketdir=/var/run \
-    --with-dynmodules="gmysql gpgsql pipe" \
-    --with-modules="" \
-    --with-pgsql-includes=/usr/include \
-    --enable-mysql \
-    --enable-pgsql 
+	--libdir=%{_libdir}/%{name} \
+	--sysconfdir=%{_sysconfdir}/%{name} \
+	--with-socketdir=/var/run \
+	--with-dynmodules="gmysql gpgsql pipe" \
+	--with-modules="" \
+	--with-pgsql-includes=/usr/include \
+	--enable-mysql \
+	--enable-pgsql \
+	--disable-static
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_initrddir},%{_sysconfdir}/%{name},/etc/sysconfig}
 
 %{__make} install \
-	DESTDIR="%{buildroot}" 
+	DESTDIR=$RPM_BUILD_ROOT
 
-install -d %{buildroot}/%{_initrddir}
-install -d %{buildroot}/%{_sysconfdir}/%{name}
-install -d %{buildroot}/etc/sysconfig
-install %{SOURCE3} %{buildroot}/%{_initrddir}/%{name}
-install %{SOURCE4} %{buildroot}/%{_sysconfdir}/%{name}/%{name}.conf
-install %{SOURCE5} %{buildroot}/etc/sysconfig/pdns
+install %{SOURCE3} $RPM_BUILD_ROOT%{_initrddir}/%{name}
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/pdns
+
+# useless - modules are dlopened by *.so
+rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ -n "`getgid djbdns`" ]; then
@@ -148,7 +137,7 @@ fi
 
 %post
 /sbin/chkconfig --add pdns
-if [ -f %{_localstatedir}/lock/subsys/pdns ]; then
+if [ -f /var/lock/subsys/pdns ]; then
 	/etc/rc.d/init.d/pdns restart >&2
 else
 	echo "Run \"/etc/rc.d/init.d/pdns start\" to start pdns." >&2
@@ -156,7 +145,7 @@ fi
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f %{_localstatedir}/lock/subsys/pdns ]; then
+	if [ -f /var/lock/subsys/pdns ]; then
 		/etc/rc.d/init.d/pdns stop
 	fi
 	/sbin/chkconfig --del pdns
@@ -166,9 +155,6 @@ fi
 if [ "$1" = "0" ]; then
 	/usr/sbin/userdel pdns
 fi
-
-%clean
-[ -n "%{buildroot}" -a "%{buildroot}" != / ] && rm -rf %{buildroot}
 
 %files
 %defattr(644,root,root,755)
@@ -181,16 +167,13 @@ fi
 %{_mandir}/man8/*
 
 %files backend-mysql
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*mysql*.so*
-%attr(644,root,root) %{_libdir}/%{name}/*mysql*.la
 
 %files backend-pgsql
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*pgsql*.so*
-%attr(644,root,root) %{_libdir}/%{name}/*pgsql*.la
 
 %files backend-pipe
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*pipe*.so*
-%attr(644,root,root) %{_libdir}/%{name}/*pipe*.la
-
-%files static
-%attr(644,root,root) %{_libdir}/%{name}/*.a
