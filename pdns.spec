@@ -39,10 +39,10 @@ different backends ranging from simple zonefiles to relational
 databases and load balancing/failover algorithms.
 
 %description -l pl
-PowerDNS to wielofunkcyjny serwer nazw posiadaj¹cy du¿¹ liczbê wtyczek
-od prostych stref (a'la BIND) pocz¹wszy, a na relacyjnych bazach
-danych skoñczywszy oraz zawieraj¹cy algorytmy zrównowa¿enia obci¹¿enia
-i prze³¹czania w wypadku awarii.
+PowerDNS to wielofunkcyjny serwer nazw posiadaj±cy du¿± liczbê wtyczek
+od prostych stref (a'la BIND) pocz±wszy, a na relacyjnych bazach
+danych skoñczywszy oraz zawieraj±cy algorytmy zrównowa¿enia obci±¿enia
+i prze³±czania w wypadku awarii.
 
 %package backend-pipe
 Summary:	PowerDNS support for custom pipe backend
@@ -57,7 +57,7 @@ documentation.
 %description backend-pipe -l pl
 Ten pakiet pozwala na utworzenie w³asnego mechanizmu przechowywania
 stref za pomoc¹ prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w
-perlu zosta³ do³¹czony do dokumentacji pakietu.
+perlu zosta³ do³±czony do dokumentacji pakietu.
 
 %package backend-gpgsql
 Summary:	PowerDNS support for PostgreSQL
