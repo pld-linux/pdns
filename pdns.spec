@@ -1,5 +1,5 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
-Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj¹cy z relacyjnych baz danych
+Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj±cy z relacyjnych baz danych
 Name:		pdns
 Version:	2.9.15
 Release:	1
@@ -14,7 +14,7 @@ Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
 Patch0:		%{name}-unistd.patch
-Patch1:	ldap_utils.diff
+Patch1:		%{name}-ldap_utils.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	flex
