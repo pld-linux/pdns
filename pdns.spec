@@ -1,23 +1,23 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj¹cy z relacyjnych baz danych
 Name:		pdns
-Version:	2.9.13
-Release:	2
+Version:	2.9.15
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	ffd80b49f553cbaaa089a02a90df7729
+# Source0-md5:	3465694b9638c29f19a25dd5b0a77559
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
 # Source1-md5:	0d71bf412024d04d6a0fca10f2714c22
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
-Patch0:		%{name}-sqlload.patch
+Patch0:		%{name}-unistd.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	libpq++-devel
+BuildRequires:	libpq++-static
 BuildRequires:	libstdc++-devel
 BuildRequires:	mysql-devel
 BuildRequires:	zlib-devel
@@ -110,9 +110,10 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 	--with-socketdir=/var/run \
 	--with-dynmodules="gmysql gpgsql pipe ldap" \
 	--with-modules="" \
-	--with-pgsql-includes=%{_includedir} \
 	--enable-mysql \
 	--enable-pgsql \
+	--with-pgsql-lib=/usr/lib \
+	--with-pgsql-includes=%{_includedir} \
 	--enable-ldap \
 	--disable-static
 
@@ -154,6 +155,12 @@ else
 fi
 
 %post
+# dirty hack so the config file is processed correctly, and server does not respawn
+TMP=`mktemp /tmp/pdns.install-tmp.XXXXXX`
+sed 's/^ *//g' /etc/pdns/pdns.conf > $TMP
+cp /etc/pdns/pdns.conf /etc/pdns/pdns.conf.rpmsave
+mv $TMP /etc/pdns/pdns.conf
+
 /sbin/chkconfig --add pdns
 if [ -f /var/lock/subsys/pdns ]; then
 	/etc/rc.d/init.d/pdns restart >&2
