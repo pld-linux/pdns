@@ -11,8 +11,11 @@ License:	GPL
 Group:		Networking/Daemons
 URL:		http://www.powerdns.com/
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	5c954197a8918d1701f8fb2e34654ed9
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
+# Source1-md5:	d95527ac7661523656f531eb053f5e8c
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
+# Source2-md5:	f261d7772008d4921801108e630796e7
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
