@@ -18,7 +18,6 @@ Patch1:		%{name}-ldap_utils.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	libpq++-static
 BuildRequires:	libstdc++-devel
 BuildRequires:	mysql-devel
 BuildRequires:	zlib-devel
