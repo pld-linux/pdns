@@ -112,8 +112,10 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 	--with-modules="" \
 	--enable-mysql \
 	--enable-pgsql \
-	--with-pgsql-lib=/usr/lib \
+	--with-pgsql-lib=%{_libdir} \
 	--with-pgsql-includes=%{_includedir} \
+	--with-mysql-lib=%{_libdir} \
+	--with-mysql-includes=%{_includedir} \
 	--enable-ldap \
 	--disable-static
 
