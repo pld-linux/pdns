@@ -45,7 +45,7 @@ doPC() {
 doPC ping
 NOTRUNNING=$?
 
-
+RETVAL=0
 case "$1" in
   status)
 	status pdns_server
