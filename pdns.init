@@ -28,8 +28,7 @@ SOCKETPATH=/var/run
 
 cd /var/run
 suffix=`basename $0 | awk -F- '{print $2}'`
-if [ $suffix ] 
-then
+if [ $suffix ]; then
 	EXTRAOPTS=--config-name=$suffix
 	PROGNAME=pdns-$suffix
 else
@@ -50,22 +49,22 @@ case "$1" in
   status)
 	status pdns_server
 	exit $?
-	;;	
+	;;
   stop)
-	if test "$NOTRUNNING" = "0"; then 
+	if test "$NOTRUNNING" = "0"; then
 		msg_stopping "PowerDNS"
 		doPC quit 2>&1 >/dev/null
 		[ $? -eq 0 ] && ok || fail
 		rm /var/lock/subsys/pdns
 	else
 		msg_not_running "PowerDNS"
-	fi 
-	;;		
+	fi
+	;;
   force-stop)
 	run_cmd "Killing PowerDNS without grace" killall -v -9 pdns_server
 	;;
   start)
-	if test "$NOTRUNNING" = "0"; then 
+	if test "$NOTRUNNING" = "0"; then
 		msg_already_running "PowerDNS"
 	else
 		msg_starting "PowerDNS (Powered DNS server)"
@@ -80,8 +79,8 @@ case "$1" in
 	$0 start
 	exit $?
 	;;
-  reload|force-reload) 
-	if test "$NOTRUNNING" = "0"; then 
+  reload|force-reload)
+	if test "$NOTRUNNING" = "0"; then
 		show "Reloading PowerDNS"
 		doPC cycle 2>&1 >/dev/null
 		if [ $? -eq 0 ]; then
@@ -94,41 +93,41 @@ case "$1" in
 		msg_not_running "PowerDNS" >&2
 		exit 7
 	fi
-	;;		
+	;;
   monitor)
-	if test "$NOTRUNNING" = "0"; then 
+	if test "$NOTRUNNING" = "0"; then
 		msg_already_running "PowerDNS"
 	else
 		show "PowerDNS in foreground (testing mode)"
 		$pdns_server --daemon=no --guardian=no --control-console --loglevel=9
-	fi 
-	;;		
+	fi
+	;;
   dump)
-	if test "$NOTRUNNING" = "0"; then 
+	if test "$NOTRUNNING" = "0"; then
 		doPC list
 		echo $ret
 	else
 		msg_not_running "PowerDNS"
-	fi 
-	;;		
+	fi
+	;;
   show)
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
 		exit 2
-	fi 
-	if test "$NOTRUNNING" = "0"; then 
+	fi
+	if test "$NOTRUNNING" = "0"; then
 		echo -n "$2="
 		doPC show $2 ; echo $ret
 	else
 		msg_not_running "PowerDNS"
-	fi 
-	;;		
+	fi
+	;;
   mrtg)
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
 		exit 2
-	fi 
-	if test "$NOTRUNNING" = "0"; then 
+	fi
+	if test "$NOTRUNNING" = "0"; then
 		doPC show $2 ; echo $ret
 		if [ "$3x" != "x" ]; then
 			doPC show $3 ; echo $ret
@@ -140,20 +139,20 @@ case "$1" in
 	else
 		msg_not_running "PowerDNS" >&2
 		exit 7
-	fi 
-	;;		
+	fi
+	;;
   cricket)
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
 		exit 2
-	fi 
-	if test "$NOTRUNNING" = "0"; then 
+	fi
+	if test "$NOTRUNNING" = "0"; then
 		doPC show $2 ; echo $ret
 	else
 		msg_not_running "PowerDNS" >&2
 		exit 7
-	fi 
-	;;		
+	fi
+	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status|dump|show|mrtg|cricket|monitor} [...]"
 	exit 3
