@@ -1,14 +1,14 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj±cy z relacyjnych baz danych
 Name:		pdns
-Version:	2.9.16
-Release:	2
+Version:	2.9.17
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	7e9a859a5a21996dbf7b31cd61731dbc
+# Source0-md5:	92489391182dc40012f1de7b2005ea93
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
-# Source1-md5:	72cce8fb180c3a70437187ff0912c2a3
+# Source1-md5:	f183b5bec39e40f8c55c19afc3a3f933
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
