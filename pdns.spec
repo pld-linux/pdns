@@ -39,9 +39,9 @@ databases and load balancing/failover algorithms.
 
 %description -l pl
 PowerDNS to wielofunkcyjny serwer nazw posiadaj±cy du¿± liczbê wtyczek
-od prostych stref (a'la BIND) pocz±wszy, a na relacyjnych bazach danych
-skoñczywszy oraz zawieraj±cy algorytmy zrównowa¿enia obci±¿enia i
-prze³±czania w wypadku awarii.
+od prostych stref (a'la BIND) pocz±wszy, a na relacyjnych bazach
+danych skoñczywszy oraz zawieraj±cy algorytmy zrównowa¿enia obci±¿enia
+i prze³±czania w wypadku awarii.
 
 %package backend-pipe
 Summary:	PowerDNS support for custom pipe backend
@@ -50,12 +50,13 @@ Group:		Development/Libraries
 
 %description backend-pipe
 This package allows creation of own backend using simple STDIN/STDOUT
-API. Example backend script in perl is provided in package documentation.
+API. Example backend script in perl is provided in package
+documentation.
 
 %description backend-pipe -l pl
-Ten pakiet pozwala na utworzenie w³asnego mechanizmu przechowywania stref
-za pomoc± prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w perlu zosta³
-do³±czony do dokumentacji pakietu.
+Ten pakiet pozwala na utworzenie w³asnego mechanizmu przechowywania
+stref za pomoc± prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w
+perlu zosta³ do³±czony do dokumentacji pakietu.
 
 %package backend-pgsql
 Summary:	PowerDNS support for PostgreSQL
@@ -89,13 +90,14 @@ cp %{SOURCE1} .
 cp %{SOURCE2} .
 
 %build
+CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 %configure \
 	--libdir=%{_libdir}/%{name} \
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--with-socketdir=/var/run \
 	--with-dynmodules="gmysql gpgsql pipe" \
 	--with-modules="" \
-	--with-pgsql-includes=/usr/include \
+	--with-pgsql-includes=%{_includedir} \
 	--enable-mysql \
 	--enable-pgsql \
 	--disable-static
