@@ -21,83 +21,89 @@
 
                 1.3. Release notes
 
-                             1.3.1. Version 2.9.13
+                             1.3.1. Version 2.9.16
 
-                             1.3.2. Version 2.9.12
+                             1.3.2. Version 2.9.15
 
-                             1.3.3. Version 2.9.11
+                             1.3.3. Version 2.9.14
 
-                             1.3.4. Version 2.9.10
+                             1.3.4. Version 2.9.13
 
-                             1.3.5. Version 2.9.8
+                             1.3.5. Version 2.9.12
 
-                             1.3.6. Version 2.9.7
+                             1.3.6. Version 2.9.11
 
-                             1.3.7. Version 2.9.6
+                             1.3.7. Version 2.9.10
 
-                             1.3.8. Version 2.9.5
+                             1.3.8. Version 2.9.8
 
-                             1.3.9. Version 2.9.4
+                             1.3.9. Version 2.9.7
 
-                             1.3.10. Version 2.9.3a
+                             1.3.10. Version 2.9.6
 
-                             1.3.11. Version 2.9.2
+                             1.3.11. Version 2.9.5
 
-                             1.3.12. Version 2.9.1
+                             1.3.12. Version 2.9.4
 
-                             1.3.13. Version 2.9
+                             1.3.13. Version 2.9.3a
 
-                             1.3.14. Version 2.8
+                             1.3.14. Version 2.9.2
 
-                             1.3.15. Version 2.7 and 2.7.1
+                             1.3.15. Version 2.9.1
 
-                             1.3.16. Version 2.6.1
+                             1.3.16. Version 2.9
 
-                             1.3.17. Version 2.6
+                             1.3.17. Version 2.8
 
-                             1.3.18. Version 2.5.1
+                             1.3.18. Version 2.7 and 2.7.1
 
-                             1.3.19. Version 2.5
+                             1.3.19. Version 2.6.1
 
-                             1.3.20. Version 2.4
+                             1.3.20. Version 2.6
 
-                             1.3.21. Version 2.3
+                             1.3.21. Version 2.5.1
 
-                             1.3.22. Version 2.2
+                             1.3.22. Version 2.5
 
-                             1.3.23. Version 2.1
+                             1.3.23. Version 2.4
 
-                             1.3.24. Version 2.0.1
+                             1.3.24. Version 2.3
 
-                             1.3.25. Version 2.0
+                             1.3.25. Version 2.2
 
-                             1.3.26. Version 2.0 Release Candidate 2
+                             1.3.26. Version 2.1
 
-                             1.3.27. Version 2.0 Release Candidate 1
+                             1.3.27. Version 2.0.1
 
-                             1.3.28. Version 1.99.12 Prerelease
+                             1.3.28. Version 2.0
 
-                             1.3.29. Version 1.99.11 Prerelease
+                             1.3.29. Version 2.0 Release Candidate 2
 
-                             1.3.30. Version 1.99.10 Prerelease
+                             1.3.30. Version 2.0 Release Candidate 1
 
-                             1.3.31. Version 1.99.9 Early Access Prerelease
+                             1.3.31. Version 1.99.12 Prerelease
 
-                             1.3.32. Version 1.99.8 Early Access Prerelease
+                             1.3.32. Version 1.99.11 Prerelease
 
-                             1.3.33. Version 1.99.7 Early Access Prerelease
+                             1.3.33. Version 1.99.10 Prerelease
 
-                             1.3.34. Version 1.99.6 Early Access Prerelease
+                             1.3.34. Version 1.99.9 Early Access Prerelease
 
-                             1.3.35. Version 1.99.5 Early Access Prerelease
+                             1.3.35. Version 1.99.8 Early Access Prerelease
 
-                             1.3.36. Version 1.99.4 Early Access Prerelease
+                             1.3.36. Version 1.99.7 Early Access Prerelease
 
-                             1.3.37. Version 1.99.3 Early Access Prerelease
+                             1.3.37. Version 1.99.6 Early Access Prerelease
 
-                             1.3.38. Version 1.99.2 Early Access Prerelease
+                             1.3.38. Version 1.99.5 Early Access Prerelease
 
-                             1.3.39. Version 1.99.1 Early Access Prerelease
+                             1.3.39. Version 1.99.4 Early Access Prerelease
+
+                             1.3.40. Version 1.99.3 Early Access Prerelease
+
+                             1.3.41. Version 1.99.2 Early Access Prerelease
+
+                             1.3.42. Version 1.99.1 Early Access Prerelease
 
                 1.4. Security
 
@@ -429,7 +435,159 @@
 
      ----------------------------------------------------------------------
 
-  1.3.1. Version 2.9.13
+  1.3.1. Version 2.9.16
+
+   The 'it must still be Friday somewhere' release. Massive number of fixes,
+   portability improvements and the new Geobackend by Mark Bergsma & friends.
+
+   New:
+
+     * The Geobackend which makes it possible to send different answers to
+       different IP ranges. Initial documentation can be found in
+       pdns/modules/geobackend/README.
+
+     * qgen query generation tool. Nearly completely undocumented and hard to
+       build too, it requires Boost. But very spiffy. Use cd pdns; make qgen
+       to build it.
+
+   Bugfixes:
+
+     * The most reported bug ever, zone2sql required the inclusion of
+       unistd.h, except on Debian unstable.
+
+     * PowerDNS tried to listen on its control "pipe" which does not work.
+       Probably harmless, but might have caused some oddities.
+
+     * The Packet Cache did not always set its TTL immediately, causing some
+       packets to be inserted, even when running with the cache disabled
+       (Mark Bergsma).
+
+     * Valgrind found some unitialized reads, causing bogus values in the
+       priority field when it was not needed
+
+     * Valgrind found a bug in MTasker where we used delete instead of
+       delete[].
+
+     * SOA serials and other parameters are unsigned. This means that very
+       large SOA serial numbers would be messed up (Michel Stol, Stefano
+       Straus)
+
+     * PowerDNS left its controlsocket around after exit and reported
+       confusing errors if a socket was already in use.
+
+     * The recursor proxy did not work on big endian systems like SPARC and
+       some MIPS processors (Remco Post)
+
+     * We no longer dump core on processing LOC records on UltraSPARC (Andrew
+       Mulholland supplied a testing machine)
+
+   Improvements:
+
+     * MySQL can now connect to a specified port again (Chris Anderton)
+
+     * When running chroot()ed and with master or slave support active,
+       PowerDNS needs to resolve domain names to find slaves. This in turn
+       may require access to certain libraries. Previously, these needed to
+       be available in the chroot directory but by forcing an initial lookup,
+       these libraries are now loaded before the chrooting.
+
+     * pdns_recursor was very slow after having done a larger number of
+       queries because of the checks to see if a query should be throttled.
+       This is now done using a set which is a lot faster than the previous
+       full sequential scan.
+
+     * The throttling code may not have throttled as much as was configured.
+
+     * Yet another big LDAP update. The LDAP backend now loadbalances
+       connections over several hosts (Norbert Sendetzky)
+
+     * Updated b.root-servers.net address in the recursor
+
+     ----------------------------------------------------------------------
+
+  1.3.2. Version 2.9.15
+
+   This release fixes up some of the shortcomings in 2.9.14, and adds some
+   new features too.
+
+   Bugfixes:
+
+     * allow-recursion-override was on by default, it was meant to be off.
+
+     * Logging was still off in daemon mode, fixed.
+
+     * debian/rules forgot to build an sqllite package
+
+     * Recursor accidentally linked in MySQL - this was the result of an
+       experiment with a persistent recursor cache.
+
+     * The PowerDNS recursor had stability problems. It now sorts nameservers
+       (roughly) by responsiveness. The 'roughly' part upset the sorting
+       algorithm used, the speeds being sorted on changed during sorting.
+
+     * The recursor now outputs the nameserver average response times in
+       trace mode
+
+     * LDAP compiles again.
+
+   Improvements:
+
+     * zone2sql can now accept - as a filename which causes it to read stdin.
+       This allows the following to work: dig axfr ds9a.nl | zone2sql
+       --gmysql --zone=- | mysql pdns, which is a nice way to import a zone.
+
+     * zone2sql now ignores duplicate SOA records which are identical - which
+       also makes the above possible.
+
+     * Remove libpqpp dependencies - since we now use the native C API for
+       PostgreSQL
+
+     ----------------------------------------------------------------------
+
+  1.3.3. Version 2.9.14
+
+   Big release with the fix for the all important 2^30 seconds problem and a
+   lot of other news.
+
+     * errno problems would cause compilation problems when using LDAP
+       (Norbert Sendetzky)
+
+     * The Generic SQL backend could cause crashes on PostgreSQL when using
+       pdns_control notify (Georg Bauer)
+
+     * Debian compatible init.d script (Wichert Akkerman)
+
+     * If using the master or slave features, pdns had the notion of eternity
+       ending in 2038, except that due to a thinko, eternity ended out to be
+       the 10th of January 2004. This caused a loop to timeout immediately.
+       Many thanks to Jasper Spaans for spotting the bug within five minutes.
+
+     * Parts of the SOA field were not cannonicalized
+
+     * The loglevel could in fact cause nothing to be logged (Norbert
+       Sendetzky)
+
+   Improvements:
+
+     * The recursor now chooses the fastest nameserver, which causes a big
+       speedup!
+
+     * LDAP now has different lookup models
+
+     * Cleanups, better load distribution, better exception handling,
+       zone2ldap improvements
+
+     * The recursor was somewhat chatty about TCP connections
+
+     * PostgreSQL now only depends on the C API and not on the deprecated C++
+       one
+
+     * PowerDNS can now fully overrule external zones when doing recursion.
+       See Chapter 11.
+
+     ----------------------------------------------------------------------
+
+  1.3.4. Version 2.9.13
 
    Big news! Windows is back! Our great friend Michel Stol found the time to
    update the PowerDNS code so it works again under windows.
@@ -507,7 +665,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.2. Version 2.9.12
+  1.3.5. Version 2.9.12
 
    Release rich in features. Work on Verisign oddities, addition of SQLite
    backend, pdns_recursor maturity.
@@ -568,7 +726,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.3. Version 2.9.11
+  1.3.6. Version 2.9.11
 
    Yet another iteration, hopefully this will be the last silly release.
 
@@ -583,7 +741,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.4. Version 2.9.10
+  1.3.7. Version 2.9.10
 
    Small bugfixes, LDAP update. Released 3rd of July 2003. Apologies for the
    long delay, real life keeps interfering.
@@ -627,7 +785,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.5. Version 2.9.8
+  1.3.8. Version 2.9.8
 
    Queen's day release! 30th of April 2003.
 
@@ -674,7 +832,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.6. Version 2.9.7
+  1.3.9. Version 2.9.7
 
    Released on 2003-03-20.
 
@@ -770,7 +928,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.7. Version 2.9.6
+  1.3.10. Version 2.9.6
 
    Two new backends - Generic ODBC (windows only) and LDAP. Furthermore, a
    few important bugs have been fixed which may have hampered sites seeing a
@@ -817,7 +975,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.8. Version 2.9.5
+  1.3.11. Version 2.9.5
 
    Released on 2002-02-03.
 
@@ -915,7 +1073,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.9. Version 2.9.4
+  1.3.12. Version 2.9.4
 
    Yet another grand release. Big news is the addition of a recursing
    nameserver which has sprung into existence over the past week. It is in
@@ -1015,7 +1173,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.10. Version 2.9.3a
+  1.3.13. Version 2.9.3a
 
    Note 2.9.3a is identical to 2.9.3 except that zone2sql does work           
 
@@ -1178,7 +1336,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.11. Version 2.9.2
+  1.3.14. Version 2.9.2
 
    Bugfixes galore. Solaris porting created some issues on all platforms.
    Great news is that PowerDNS is now in Debian 'sid' (unstable). The 2.9.1
@@ -1244,7 +1402,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.12. Version 2.9.1
+  1.3.15. Version 2.9.1
 
    Thanks to the great enthusiasm from around the world, powerdns is now
    available for Solaris and FreeBSD users again! Furthermore, the Windows
@@ -1312,7 +1470,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.13. Version 2.9
+  1.3.16. Version 2.9
 
    Open source release. Do not deploy unless you know what you are doing.
    Stability is expected to return with 2.9.1, as are the binary builds.
@@ -1327,7 +1485,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.14. Version 2.8
+  1.3.17. Version 2.8
 
    From this release onwards, we'll concentrate on stabilising for the 3.0
    release. So if you have any must-have features, let us know soonest. The
@@ -1350,7 +1508,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.15. Version 2.7 and 2.7.1
+  1.3.18. Version 2.7 and 2.7.1
 
    This version fixes some very long standing issues and adds a few new
    features. If you are still running 2.6, upgrade yesterday. If you were
@@ -1406,13 +1564,13 @@
 
      ----------------------------------------------------------------------
 
-  1.3.16. Version 2.6.1
+  1.3.19. Version 2.6.1
 
    Quick fix release for a big cache problem.
 
      ----------------------------------------------------------------------
 
-  1.3.17. Version 2.6
+  1.3.20. Version 2.6
 
    Performance release. A lot of work has been done to raise PDNS performance
    to staggering levels in order to take part in benchmarketing efforts.
@@ -1475,7 +1633,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.18. Version 2.5.1
+  1.3.21. Version 2.5.1
 
    Brown paper bag release fixing a huge memory leak in the new Query Cache.
 
@@ -1499,7 +1657,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.19. Version 2.5
+  1.3.22. Version 2.5
 
    An important release which has seen quite a lot of trial and error
    testing. As a result, PDNS can now run with a huge cache and concurrent
@@ -1595,7 +1753,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.20. Version 2.4
+  1.3.23. Version 2.4
 
    Developers: this version is compatible with the pdns-2.1 development kit,
    available on http://downloads.powerdns.com/releases/dev. See also Appendix
@@ -1645,7 +1803,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.21. Version 2.3
+  1.3.24. Version 2.3
 
    Developers: this version is compatible with the pdns-2.1 development kit,
    available on http://downloads.powerdns.com/releases/dev. See also Appendix
@@ -1688,7 +1846,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.22. Version 2.2
+  1.3.25. Version 2.2
 
    Developers: this version is compatible with the pdns-2.1 development kit,
    available on http://downloads.powerdns.com/releases/dev. See also Appendix
@@ -1743,7 +1901,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.23. Version 2.1
+  1.3.26. Version 2.1
 
    This is a somewhat bigger release due to pressing demands from customers.
    An upgrade is advised for installations using Recursion. If you are using
@@ -1812,7 +1970,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.24. Version 2.0.1
+  1.3.27. Version 2.0.1
 
    Maintenance release, fixing three small issues.
 
@@ -1831,7 +1989,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.25. Version 2.0
+  1.3.28. Version 2.0
 
    Two bugfixes, one stability/security related. No new features.
 
@@ -1848,7 +2006,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.26. Version 2.0 Release Candidate 2
+  1.3.29. Version 2.0 Release Candidate 2
 
    Mostly bugfixes, no really new features.
 
@@ -1899,7 +2057,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.27. Version 2.0 Release Candidate 1
+  1.3.30. Version 2.0 Release Candidate 1
 
    The MacOS X release! A very experimental OS X 10.2 build has been added.
    Furthermore, the Windows version is now in line with Unix with respect to
@@ -1975,7 +2133,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.28. Version 1.99.12 Prerelease
+  1.3.31. Version 1.99.12 Prerelease
 
    The Windows release! See Chapter 3. Beware, windows support is still very
    fresh and untested. Feedback is very welcome.
@@ -2036,7 +2194,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.29. Version 1.99.11 Prerelease
+  1.3.32. Version 1.99.11 Prerelease
 
    This release is important because it is the first release which is
    accompanied by an Open Source Backend Development Kit, allowing external
@@ -2051,7 +2209,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.30. Version 1.99.10 Prerelease
+  1.3.33. Version 1.99.10 Prerelease
 
    IMPORTANT: there has been a tiny license change involving free public
    webbased dns hosting, check out the changes before deploying!
@@ -2114,7 +2272,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.31. Version 1.99.9 Early Access Prerelease
+  1.3.34. Version 1.99.9 Early Access Prerelease
 
    This is again a feature and an infrastructure release. We are nearly
    feature complete and will soon start work on the backends to make sure
@@ -2180,7 +2338,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.32. Version 1.99.8 Early Access Prerelease
+  1.3.35. Version 1.99.8 Early Access Prerelease
 
    A lot of infrastructure work gearing up to 2.0. Some stability bugs fixed
    and a lot of new features.
@@ -2232,7 +2390,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.32.1. Known bugs
+    1.3.35.1. Known bugs
 
    Wildcard CNAMES do not work as they do with bind.
 
@@ -2243,7 +2401,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.32.2. Missing features
+    1.3.35.2. Missing features
 
    Features present in this document, but disabled or withheld from the
    current release:
@@ -2252,7 +2410,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.33. Version 1.99.7 Early Access Prerelease
+  1.3.36. Version 1.99.7 Early Access Prerelease
 
    Named.conf parsing got a lot of work and many more bind configurations can
    now be parsed. Furthermore, error reporting was improved. Stability is
@@ -2289,13 +2447,13 @@
 
      ----------------------------------------------------------------------
 
-    1.3.33.1. Known bugs
+    1.3.36.1. Known bugs
 
    Wildcard CNAMES do not work as they do with bind.
 
      ----------------------------------------------------------------------
 
-    1.3.33.2. Missing features
+    1.3.36.2. Missing features
 
    Features present in this document, but disabled or withheld from the
    current release:
@@ -2306,7 +2464,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.34. Version 1.99.6 Early Access Prerelease
+  1.3.37. Version 1.99.6 Early Access Prerelease
 
    This version is now running on dns-eu1.powerdns.net and working very well
    for us. But please remain cautious before deploying!
@@ -2335,7 +2493,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.34.1. Known bugs
+    1.3.37.1. Known bugs
 
    FreeBSD version does not stop when requested to do so.
 
@@ -2343,7 +2501,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.34.2. Missing features
+    1.3.37.2. Missing features
 
     Features present in this document, but disabled or withheld from the
    current release:
@@ -2354,7 +2512,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.35. Version 1.99.5 Early Access Prerelease
+  1.3.38. Version 1.99.5 Early Access Prerelease
 
    The main focus of this release is stability and TCP improvements. This is
    the first release PowerDNS-the-company actually considers for running on
@@ -2392,7 +2550,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.35.1. Known bugs
+    1.3.38.1. Known bugs
 
    FreeBSD version does not stop when requested to do so.
 
@@ -2400,7 +2558,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.35.2. Missing features
+    1.3.38.2. Missing features
 
     Features present in this document, but disabled or withheld from the
    current release:
@@ -2411,7 +2569,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.36. Version 1.99.4 Early Access Prerelease
+  1.3.39. Version 1.99.4 Early Access Prerelease
 
    A lot of new named.confs can now be parsed, zone2sql & bindbackend have
    gained features and stability.
@@ -2454,7 +2612,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.36.1. Known bugs
+    1.3.39.1. Known bugs
 
    FreeBSD version does not stop when requested to do so.
 
@@ -2464,7 +2622,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.36.2. Missing features
+    1.3.39.2. Missing features
 
     Features present in this document, but disabled or withheld from the
    current release:
@@ -2475,7 +2633,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.37. Version 1.99.3 Early Access Prerelease
+  1.3.40. Version 1.99.3 Early Access Prerelease
 
    The big news in this release is the BindBackend which is now capable of
    parsing many more named.conf Bind configurations. Furthermore, PDNS has
@@ -2518,7 +2676,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.37.1. Known bugs
+    1.3.40.1. Known bugs
 
    FreeBSD version does not stop when requested to do so.
 
@@ -2526,7 +2684,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.37.2. Missing features
+    1.3.40.2. Missing features
 
     Features present in this document, but disabled or withheld from the
    current release:
@@ -2537,7 +2695,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.38. Version 1.99.2 Early Access Prerelease
+  1.3.41. Version 1.99.2 Early Access Prerelease
 
    Major bugs fixed:
 
@@ -2585,7 +2743,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.38.1. Known bugs
+    1.3.41.1. Known bugs
 
    Decreasing a ringbuffer on the website is a sure way to crash the daemon.
    Zone2sql, while improved, still has problems with a zone in the following
@@ -2607,7 +2765,7 @@
 
      ----------------------------------------------------------------------
 
-    1.3.38.2. Missing features
+    1.3.41.2. Missing features
 
    Features present in this document, but disabled or withheld from the
    current release:
@@ -2621,7 +2779,7 @@
 
      ----------------------------------------------------------------------
 
-  1.3.39. Version 1.99.1 Early Access Prerelease
+  1.3.42. Version 1.99.1 Early Access Prerelease
 
    This is the first public release of what is going to become PDNS 2.0. As
    such, it is not of production quality. Even PowerDNS-the-company does not
@@ -2632,14 +2790,14 @@
 
      ----------------------------------------------------------------------
 
-    1.3.39.1. Known bugs
+    1.3.42.1. Known bugs
 
    Decreasing a ringbuffer on the website is a sure way to crash the daemon.
    Zone2sql is very buggy.
 
      ----------------------------------------------------------------------
 
-    1.3.39.2. Missing features
+    1.3.42.2. Missing features
 
    Features present in this document, but disabled or withheld from the
    current release:
@@ -3440,10 +3598,15 @@
    Even though this will hamper hackers a lot, chroot jails have been known
    to be broken.
 
-   When chrooting PDNS, take care that backends will be able to get to their
-   files. Many databases need access to a UNIX domain socket which should
-   live within the chroot. It is often possible to hardlink such a socket
-   into the chroot dir.
+   Warning When chrooting PDNS, take care that backends will be able to get   
+           to their files. Many databases need access to a UNIX domain socket 
+           which should live within the chroot. It is often possible to       
+           hardlink such a socket into the chroot dir.                        
+                                                                              
+           When running with master or slave support, be aware that many      
+           operating systems need access to specific libraries (ofen          
+           /lib/libnss*) in order to support resolution of domain names! You  
+           can also hardlink these.                                           
 
    The default PDNS configuration is best chrooted to ./, which boils down to
    the configured location of the controlsocket.
@@ -3745,7 +3908,13 @@
    To make sure that the local authoritative database overrides recursive
    information, PowerDNS first tries to answer a question from its own
    database. If that succeeds, the answer packet is sent back immediately
-   without involving the recursor in any way.
+   without involving the recursor in any way. This means that for questions
+   for which there is no answer, PowerDNS will consult the recursor for an
+   recursive query, even if PowerDNS is authoritative for a domain! This will
+   only cause problems if you 'fake' domains which don't really exist.
+
+   If you want to create such fake domains or override existing domains,
+   please set the allow-recursion-override feature (available as of 2.9.14).
 
    Some packets, like those asking for MX records which are needed for SMTP
    transport of email, can be subject to 'additional processing'. This means
@@ -4103,6 +4272,14 @@
            everywhere. Example: allow-recursion=192.168.0.0/24, 10.0.0.0/8,
            1.2.3.4.
 
+   allow-recursion-override=on|off
+
+           By specifying allow-recursion-override, local data even about
+           hosts that don't exist will override the internet. This allows you
+           to generate zones that don't really exist on the internet. Does
+           increase the number of SQL queries for hosts that truly don't
+           exist, also not in your database.
+
    cache-ttl=...
 
            Seconds to store packets in the PacketCache. See Section 9.1.
@@ -4303,6 +4480,17 @@
 
            Where we send hosts to that need to be url redirected. See Chapter
            14.
+
+   version-string=anonymous|powerdns|full|custom
+
+           When queried for its version over DNS (dig chaos txt version.bind
+           @pdns.ip.address), PowerDNS normally resonds truthfully. With this
+           setting you can overrule what will be returned. Set the
+           version-string to 'full' to get the default behaviour, to
+           'powerdns' to just make it state 'served by PowerDNS -
+           http://www.powerdns.com'. The 'anonymous' setting will return a
+           ServFail, much like Microsoft nameservers do. You can set this
+           response to a custom value as well.
 
    webserver | --webserver=yes | --webserver=no
 
@@ -7554,8 +7742,9 @@ D.1. Compiling PowerDNS on Unix
 
   D.1.5. OpenBSD
 
-   Compiles but then does not work. We hear that it may work with more recent
-   versions of gcc, please let us know on <pdns-dev@mailman.powerdns.com>.
+   Compiles but then does not work very well. We hear that it may work with
+   more recent versions of gcc, please let us know on
+   <pdns-dev@mailman.powerdns.com>.
 
      ----------------------------------------------------------------------
 
@@ -7567,6 +7756,10 @@ D.1. Compiling PowerDNS on Unix
    which PowerDNS relies on heavily. Use gcc and gmake (if available).
    Regular Solaris make has some issues with some PowerDNS Makefile
    constructs.
+
+   When compiling, make sure that you have /usr/ccs/bin in your path.
+   Furthermore, with some versions of MySQL, you may have to add
+   "LDFLAGS=-lz" before ./configure.
 
      ----------------------------------------------------------------------
 
