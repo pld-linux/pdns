@@ -55,13 +55,13 @@ Group:		Development/Libraries
 
 %description backend-pipe
 This package allows creation of own backend using simple STDIN/STDOUT
-API. Example backend script in perl is provided in package
+API. Example backend script in Perl is provided in package
 documentation.
 
 %description backend-pipe -l pl
 Ten pakiet pozwala na utworzenie w³asnego mechanizmu przechowywania
 stref za pomoc¹ prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w
-perlu zosta³ do³±czony do dokumentacji pakietu.
+Perlu zosta³ do³±czony do dokumentacji pakietu.
 
 %package backend-gpgsql
 Summary:	PowerDNS support for PostgreSQL
