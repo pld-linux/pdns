@@ -41,16 +41,45 @@ od prostych stref (a'la BIND) pocz±wszy, a na relacyjnych bazach danych
 skoñczywszy oraz zawieraj±cy algorytmy zrównowa¿enia obci±¿enia i 
 prze³±czania w wypadku awarii.
 
-%package devel
-Summary:	PowerDNS developement libraries
-Summary(pl):	Biblioteki PowerDNS
+%package backend-pipe
+Summary:	PowerDNS support for custom pipe backend
+Summary(pl):	Wsparcie PowerDNS dla w³asnego mechanizmu przechowywania stref
 Group:		Development/Libraries
 
-%description devel 
-Developement libraries for PowerDNS.
+%description backend-pipe
+This package allows creation of own backend using simple STDIN/STDOUT
+API. Example backend script in perl is provided in package documentation.
 
-%description devel -l pl
-Pliki bibliotek dla PowerDNS.
+%description backend-pipe -l pl
+Ten pakiet pozwala na utworzenie w³asnego mechanizmu przechowywania stref
+za pomoc± prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w perlu zosta³
+do³±czony do dokumentacji pakietu.
+
+%package backend-pgsql
+Summary:	PowerDNS support for PostgreSQL
+Summary(pl):	Wsparcie PowerDNS dla baz PostgresQL
+Group:		Development/Libraries
+Requires:	postgresql
+
+%description backend-pgsql
+This package allows zone storage in PostgreSQL relational db tables.
+
+%description backend-pgsql -l pl
+Ten pakiet pozwala na przechowywanie danych o strefach w tabelach 
+relacyjnej bazy danych PostgreSQL.
+
+%package backend-mysql
+Summary:	PowerDNS support for MySQL
+Summary(pl):	Wsparcie PowerDNS dla baz MySQL
+Group:		Development/Libraries
+Requires:	mysql
+
+%description backend-mysql
+This package allows zone storage in MySQL relational db tables.
+
+%description backend-mysql -l pl
+Ten pakiet pozwala na przechowywanie danych o strefach w tabelach 
+relacyjnej bazy danych MySQL.
 
 %package static
 Summary:	PowerDNS static libs
@@ -90,9 +119,10 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR="%{buildroot}" 
 
+install -d %{buildroot}/%{_docdir}/%{name}-%{version}
 install -d %{buildroot}/%{_initrddir}
 install -d %{buildroot}/%{_sysconfdir}/%{name}
-install -m644 %{SOURCE1} %{buildroot}/%{name}.pdf
+install -m644 %{SOURCE1} %{buildroot}/%{_docdir}/%{name}-%{version}/%{name}.pdf
 install -m754 %{SOURCE2} %{buildroot}/%{_initrddir}/%{name}
 install -m600 %{SOURCE3} %{buildroot}/%{_sysconfdir}/%{name}/%{name}.conf
 
@@ -130,17 +160,24 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog HACKING INSTALL README TODO WARNING %{name}.pdf
+%doc ChangeLog HACKING INSTALL README TODO WARNING 
 %config(noreplace) %attr(0600,root,root) %{_sysconfdir}/%{name}/%{name}.conf
 %config(noreplace) %attr(0754,root,root) %{_initrddir}/%{name}
-%dir %{_sysconfdir}%{name}
+%dir %{_sysconfdir}/%{name}
 %attr(755,root,root) %{_sbindir}/*
-%{_libdir}%{name}/*
 %{_mandir}/man8/*
 
-%files devel
-%attr(755,root,root) %{_libdir}/%{name}/*.so
-%attr(644,root,root) %{_libdir}/%{name}/*.la
+%files backend-mysql
+%attr(755,root,root) %{_libdir}/%{name}/*mysql*.so
+%attr(644,root,root) %{_libdir}/%{name}/*mysql*.la
+
+%files backend-pgsql
+%attr(755,root,root) %{_libdir}/%{name}/*pgsql*.so
+%attr(644,root,root) %{_libdir}/%{name}/*pgsql*.la
+
+%files backend-pipe
+%attr(755,root,root) %{_libdir}/%{name}/*pipe*.so
+%attr(644,root,root) %{_libdir}/%{name}/*pipe*.la
 
 %files static
 %attr(644,root,root) %{_libdir}/%{name}/*.a
