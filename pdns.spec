@@ -150,7 +150,7 @@ if [ -n "`id -u pdns 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 30 -r -d '' -s /bin/false -c "pdns User" -g djbdns pdns 1>&2
+	/usr/sbin/useradd -u 30 -r -d /var/lib/pdns -s /bin/false -c "pdns User" -g djbdns pdns 1>&2
 fi
 
 %post
