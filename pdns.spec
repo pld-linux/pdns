@@ -13,11 +13,12 @@ Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
+Patch0:		%{name}-configure.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	libstdc++-devel
-BuildRequires:	libpq++-static
+BuildRequires:	libpq++-devel
 BuildRequires:	mysql-devel
 BuildRequires:	zlib-devel
 BuildRequires:	openldap-devel
@@ -97,6 +98,7 @@ Ten pakiet pozwala na przechowywanie danych o strefach w katalogu LDAP.
 
 %prep
 %setup -q
+%patch0 -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 
