@@ -40,7 +40,7 @@ databases and load balancing/failover algorithms.
 %description -l pl
 PowerDNS to wielofunkcyjny serwer nazw posiadaj±cy du¿± liczbê wtyczek
 od prostych stref (a'la BIND) pocz±wszy, a na relacyjnych bazach danych
-skoñczywszy oraz zawieraj±cy algorytmy zrównowa¿enia obci±¿enia i 
+skoñczywszy oraz zawieraj±cy algorytmy zrównowa¿enia obci±¿enia i
 prze³±czania w wypadku awarii.
 
 %package backend-pipe
@@ -67,7 +67,7 @@ Requires:	postgresql
 This package allows zone storage in PostgreSQL relational db tables.
 
 %description backend-pgsql -l pl
-Ten pakiet pozwala na przechowywanie danych o strefach w tabelach 
+Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
 relacyjnej bazy danych PostgreSQL.
 
 %package backend-mysql
@@ -80,7 +80,7 @@ Requires:	mysql
 This package allows zone storage in MySQL relational db tables.
 
 %description backend-mysql -l pl
-Ten pakiet pozwala na przechowywanie danych o strefach w tabelach 
+Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
 relacyjnej bazy danych MySQL.
 
 %prep
