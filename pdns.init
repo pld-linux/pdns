@@ -48,35 +48,25 @@ NOTRUNNING=$?
 
 case "$1" in
   status)
-	if test "$NOTRUNNING" = "0" ; then 
-		doPC status
-		echo $ret
-	else
-		msg_not_running "PowerDNS"
-		exit 1
-	fi 
+	status pdns_server
+	exit $?
 	;;	
-
   stop)
 	if test "$NOTRUNNING" = "0"; then 
 		msg_stopping "PowerDNS"
 		doPC quit 2>&1 >/dev/null
-		[ $? ] && ok || fail
+		[ $? -eq 0 ] && ok || fail
 		rm /var/lock/subsys/pdns
 	else
 		msg_not_running "PowerDNS"
-		exit 1
 	fi 
 	;;		
-
   force-stop)
 	run_cmd "Killing PowerDNS without grace" killall -v -9 pdns_server
 	;;
-
   start)
 	if test "$NOTRUNNING" = "0"; then 
 		msg_already_running "PowerDNS"
-		exit 1
 	else
 		msg_starting "PowerDNS (Powered DNS server)"
 		daemon $pdns_server --daemon --guardian=yes
@@ -84,24 +74,22 @@ case "$1" in
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pdns
 	fi
 	;;
-
-  force-reload | restart)
+  restart)
 	$0 stop
 	run_cmd "PowerDNS (3 sec. timeout)" sleep 3
 	$0 start
+	exit $?
 	;;
-
-  reload) 
+  reload|force-reload) 
 	if test "$NOTRUNNING" = "0"; then 
 		show "Reloading PowerDNS"
 		doPC cycle 2>&1 >/dev/null
-		[ $? ] && ok || fail
+		[ $? -eq 0 ] && ok || fail
 	else
 		msg_not_running "PowerDNS"
 		$0 start
-	fi 
+	fi
 	;;		
-		
   monitor)
 	if test "$NOTRUNNING" = "0"; then 
 		msg_already_running "PowerDNS"
@@ -110,7 +98,6 @@ case "$1" in
 		$pdns_server --daemon=no --guardian=no --control-console --loglevel=9
 	fi 
 	;;		
-
   dump)
 	if test "$NOTRUNNING" = "0"; then 
 		doPC list
@@ -119,7 +106,6 @@ case "$1" in
 		msg_not_running "PowerDNS"
 	fi 
 	;;		
-
   show)
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
@@ -151,7 +137,6 @@ case "$1" in
 		exit 1
 	fi 
 	;;		
-
   cricket)
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
@@ -164,10 +149,9 @@ case "$1" in
 		exit 1
 	fi 
 	;;		
-
   *)
-	msg_usage "$0 {start|stop|reload|force-reload|restart|status|dump|show|mrtg|cricket|monitor} [...]"
-	;;
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status|dump|show|mrtg|cricket|monitor} [...]"
+	exit 3
 esac
 
 exit $RETVAL
