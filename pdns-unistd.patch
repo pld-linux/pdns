@@ -1,0 +1,11 @@
+diff -urN orig/pdns/backends/bind/zoneparser2.cc pdns-2.9.15/pdns/backends/bind/zoneparser2.cc
+--- orig/pdns/backends/bind/zoneparser2.cc	Sat Jan 17 12:50:18 2004
++++ pdns-2.9.15/pdns/backends/bind/zoneparser2.cc	Tue Jan 20 21:57:00 2004
+@@ -36,6 +36,7 @@
+ #include "ahuexception.hh"
+ #include "qtype.hh"
+ #include <algorithm>
++#include <unistd.h>
+ using namespace std;
+ 
+ #include "zoneparser.hh"
