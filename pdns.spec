@@ -20,9 +20,11 @@ BuildRequires:	libpq++-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	mysql-devel
 BuildRequires:	zlib-devel
+PreReq:		rc-scripts
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	/usr/sbin/groupadd
+Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/userdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Provides:	nameserver
