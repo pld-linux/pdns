@@ -14,6 +14,7 @@ Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
 Patch0:		%{name}-unistd.patch
+Patch1:	ldap_utils.diff
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -99,6 +100,7 @@ Ten pakiet pozwala na przechowywanie danych o strefach w katalogu LDAP.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 
