@@ -71,7 +71,6 @@ Perlu zosta³ do³±czony do dokumentacji pakietu.
 Summary:	PowerDNS support for PostgreSQL
 Summary(pl):	Wsparcie PowerDNS dla baz PostgresQL
 Group:		Development/Libraries
-Requires:	postgresql-libs
 
 %description backend-gpgsql
 This package allows zone storage in PostgreSQL relational db tables.
@@ -84,7 +83,6 @@ relacyjnej bazy danych PostgreSQL.
 Summary:	PowerDNS support for MySQL
 Summary(pl):	Wsparcie PowerDNS dla baz MySQL
 Group:		Development/Libraries
-Requires:	mysql-libs
 
 %description backend-gmysql
 This package allows zone storage in MySQL relational db tables.
@@ -97,7 +95,6 @@ relacyjnej bazy danych MySQL.
 Summary:	PowerDNS support for LDAP
 Summary(pl):	Wsparcie PowerDNS dla baz LDAP
 Group:		Development/Libraries
-Requires:	openldap-libs
 
 %description backend-ldap
 This package allows zone storage in LDAP directory.
