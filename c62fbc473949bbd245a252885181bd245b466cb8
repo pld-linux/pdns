@@ -1,0 +1,2 @@
+- updated to 2.9.11
+- added %{_bindir} to %files
