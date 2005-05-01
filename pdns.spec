@@ -25,7 +25,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	libpq++-devel
 BuildRequires:	mysql-devel
 BuildRequires:	openldap-devel
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	zlib-devel
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
@@ -147,27 +147,13 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/usr/bin/getgid djbdns`" ]; then
-	if [ "`/usr/bin/getgid djbdns`" != "32" ]; then
-		echo "Error: group djbdns doesn't have gid=32. Correct this before installing pdns." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 32 djbdns
-fi
-if [ -n "`/bin/id -u pdns 2>/dev/null`" ]; then
-	if [ "`/bin/id -u pdns`" != "30" ]; then
-		echo "Error: user pdns doesn't have uid=30. Correct this before installing pdns." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 30 -d /var/lib/pdns -s /bin/false -c "pdns User" -g djbdns pdns 1>&2
-fi
+%groupadd -g 32 djbdns
+%useradd -u 30 -d /var/lib/pdns -s /bin/false -c "pdns User" -g djbdns pdns
 
 %post
 # dirty hack so the config file is processed correctly, and server does not respawn
 TMP=`mktemp /tmp/pdns.install-tmp.XXXXXX`
-sed 's/^ *//g' /etc/pdns/pdns.conf > $TMP
+sed 's/^ *//' /etc/pdns/pdns.conf > $TMP
 cp /etc/pdns/pdns.conf /etc/pdns/pdns.conf.rpmsave
 mv $TMP /etc/pdns/pdns.conf
 
