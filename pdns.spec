@@ -1,12 +1,12 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj±cy z relacyjnych baz danych
 Name:		pdns
-Version:	2.9.17
-Release:	5
+Version:	2.9.18
+Release:	0.1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	92489391182dc40012f1de7b2005ea93
+# Source0-md5:	bcfb0573311e80dbeff0bb16f2764363
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
 # Source1-md5:	f183b5bec39e40f8c55c19afc3a3f933
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
@@ -14,10 +14,6 @@ Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
-#Patch1:	http://wiki.powerdns.com/projects/trac/changeset/305?format=diff
-Patch1:		pdns-305.patch
-#Patch2:	http://wiki.powerdns.com/projects/trac/changeset/307?format=diff
-Patch2:		pdns-307.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -105,8 +101,6 @@ Ten pakiet pozwala na przechowywanie danych o strefach w katalogu LDAP.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p2
-%patch2 -p2
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 
