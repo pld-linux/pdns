@@ -2,7 +2,7 @@ Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj±cy z relacyjnych baz danych
 Name:		pdns
 Version:	2.9.18
-Release:	0.1
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
@@ -14,6 +14,7 @@ Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
+Patch1:		%{name}-strbind.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -96,11 +97,13 @@ Group:		Development/Libraries
 This package allows zone storage in LDAP directory.
 
 %description backend-ldap -l pl
-Ten pakiet pozwala na przechowywanie danych o strefach w katalogu LDAP.
+Ten pakiet pozwala na przechowywanie danych o strefach w katalogu
+LDAP.
 
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 
@@ -174,11 +177,11 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog HACKING INSTALL README TODO WARNING pdns.pdf pdns.txt
-%config(noreplace) %attr(0600,root,root) %{_sysconfdir}/%{name}/%{name}.conf
-%config(noreplace) %attr(0754,root,root) %{_initrddir}/%{name}
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pdns
+%doc ChangeLog HACKING INSTALL README TODO pdns.pdf pdns.txt
+%attr(754,root,root) %{_initrddir}/%{name}
 %dir %{_sysconfdir}/%{name}
+%attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pdns
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/*
 %{_mandir}/man8/*
