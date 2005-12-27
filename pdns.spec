@@ -2,7 +2,7 @@ Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl):	PowerDNS to wielofunkcyjny serwer nazw korzystaj±cy z relacyjnych baz danych
 Name:		pdns
 Version:	2.9.19
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
@@ -55,6 +55,7 @@ i prze³±czania w wypadku awarii.
 Summary:	PowerDNS support for custom pipe backend
 Summary(pl):	Wsparcie PowerDNS dla w³asnego mechanizmu przechowywania stref
 Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
 
 %description backend-pipe
 This package allows creation of own backend using simple STDIN/STDOUT
@@ -70,6 +71,7 @@ Perlu zosta³ do³±czony do dokumentacji pakietu.
 Summary:	PowerDNS support for PostgreSQL
 Summary(pl):	Wsparcie PowerDNS dla baz PostgresQL
 Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
 
 %description backend-gpgsql
 This package allows zone storage in PostgreSQL relational db tables.
@@ -82,6 +84,7 @@ relacyjnej bazy danych PostgreSQL.
 Summary:	PowerDNS support for MySQL
 Summary(pl):	Wsparcie PowerDNS dla baz MySQL
 Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
 
 %description backend-gmysql
 This package allows zone storage in MySQL relational db tables.
@@ -94,6 +97,7 @@ relacyjnej bazy danych MySQL.
 Summary:	PowerDNS support for LDAP
 Summary(pl):	Wsparcie PowerDNS dla baz LDAP
 Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
 
 %description backend-ldap
 This package allows zone storage in LDAP directory.
