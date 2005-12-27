@@ -64,7 +64,7 @@ documentation.
 
 %description backend-pipe -l pl
 Ten pakiet pozwala na utworzenie w³asnego mechanizmu przechowywania
-stref za pomoc¹ prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w
+stref za pomoc± prostego interfejsu STDIN/STDOUT. Przyk³adowy skrypt w
 Perlu zosta³ do³±czony do dokumentacji pakietu.
 
 %package backend-gpgsql
