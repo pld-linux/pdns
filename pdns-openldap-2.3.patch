@@ -1,0 +1,11 @@
+--- pdns-2.9.19/modules/ldapbackend/powerldap.hh~	2006-01-18 00:55:23.000000000 +0100
++++ pdns-2.9.19/modules/ldapbackend/powerldap.hh	2006-01-18 01:03:42.000000000 +0100
+@@ -27,6 +27,8 @@
+ #include <stdexcept>
+ #include <errno.h>
+ #include <lber.h>
++
++#define LDAP_DEPRECATED 1
+ #include <ldap.h>
+ 
+ 
