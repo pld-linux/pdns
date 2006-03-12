@@ -21,25 +21,26 @@ BuildRequires:	bison
 BuildRequires:	boost-devel
 BuildRequires:	boost-ref-devel
 BuildRequires:	flex
-BuildRequires:	libstdc++-devel
 BuildRequires:	libpq++-devel
+BuildRequires:	libstdc++-devel
 BuildRequires:	mysql-devel
 BuildRequires:	openldap-devel >= 2.3.0
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
-PreReq:		rc-scripts
+Requires(post):	sed >= 4.0
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+Requires:	rc-scripts
 Provides:	group(djbdns)
 Provides:	nameserver
 Provides:	user(pdns)
 Obsoletes:	powerdns
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 PowerDNS is a versatile nameserver which supports a large number of
@@ -157,23 +158,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 # dirty hack so the config file is processed correctly, and server does not respawn
-TMP=`mktemp /tmp/pdns.install-tmp.XXXXXX`
-sed 's/^ *//' /etc/pdns/pdns.conf > $TMP
-cp /etc/pdns/pdns.conf /etc/pdns/pdns.conf.rpmsave
-mv $TMP /etc/pdns/pdns.conf
+sed -i -e 's/^ *//' /etc/pdns/pdns.conf
 
 /sbin/chkconfig --add pdns
-if [ -f /var/lock/subsys/pdns ]; then
-	/etc/rc.d/init.d/pdns restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/pdns start\" to start pdns." >&2
-fi
+%service pdns restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/pdns ]; then
-		/etc/rc.d/init.d/pdns stop
-	fi
+	%service pdns stop
 	/sbin/chkconfig --del pdns
 fi
 
