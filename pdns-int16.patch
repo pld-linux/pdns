@@ -1,7 +1,7 @@
-diff -Naur pdns-2.9.19-orig/modules/ldapbackend/ldapbackend.cc pdns-2.9.19/modules/ldapbackend/ldapbackend.cc
---- pdns-2.9.19-orig/modules/ldapbackend/ldapbackend.cc	2005-09-03 18:12:43.000000000 +0000
-+++ pdns-2.9.19/modules/ldapbackend/ldapbackend.cc	2005-11-16 17:22:33.000000000 +0000
-@@ -429,7 +429,7 @@
+diff -urN org/modules/ldapbackend/ldapbackend.cc mod/modules/ldapbackend/ldapbackend.cc
+--- org/modules/ldapbackend/ldapbackend.cc	2006-03-15 19:29:39.000000000 +0100
++++ mod/modules/ldapbackend/ldapbackend.cc	2006-04-08 02:07:50.117145250 +0200
+@@ -420,7 +420,7 @@
  								continue;
  							}
  
@@ -10,27 +10,27 @@ diff -Naur pdns-2.9.19-orig/modules/ldapbackend/ldapbackend.cc pdns-2.9.19/modul
  							if( *endptr != '\0' )
  							{
  								L << Logger::Warning << m_myname << " Invalid " << attrname << " without priority for " << m_qname << ": " << content << endl;
-diff -Naur pdns-2.9.19-orig/modules/ldapbackend/powerldap.cc pdns-2.9.19/modules/ldapbackend/powerldap.cc
---- pdns-2.9.19-orig/modules/ldapbackend/powerldap.cc	2005-09-03 18:12:43.000000000 +0000
-+++ pdns-2.9.19/modules/ldapbackend/powerldap.cc	2005-11-16 17:22:59.000000000 +0000
+diff -urN org/modules/ldapbackend/powerldap.cc mod/modules/ldapbackend/powerldap.cc
+--- org/modules/ldapbackend/powerldap.cc	2006-03-15 19:29:39.000000000 +0100
++++ mod/modules/ldapbackend/powerldap.cc	2006-04-08 02:08:31.295718750 +0200
 @@ -2,7 +2,7 @@
  
  
  
--PowerLDAP::PowerLDAP( const string& host, uint16_t port, bool tls )
-+PowerLDAP::PowerLDAP( const string& host, u_int16_t port, bool tls )
+-PowerLDAP::PowerLDAP( const string& hosts, uint16_t port, bool tls )
++PowerLDAP::PowerLDAP( const string& hosts, u_int16_t port, bool tls )
  {
  	int protocol = LDAP_VERSION3;
  
-diff -Naur pdns-2.9.19-orig/modules/ldapbackend/powerldap.hh pdns-2.9.19/modules/ldapbackend/powerldap.hh
---- pdns-2.9.19-orig/modules/ldapbackend/powerldap.hh	2005-09-03 18:12:43.000000000 +0000
-+++ pdns-2.9.19/modules/ldapbackend/powerldap.hh	2005-11-16 17:23:23.000000000 +0000
-@@ -69,7 +69,7 @@
+diff -urN org/modules/ldapbackend/powerldap.hh mod/modules/ldapbackend/powerldap.hh
+--- org/modules/ldapbackend/powerldap.hh	2006-03-15 19:29:39.000000000 +0100
++++ mod/modules/ldapbackend/powerldap.hh	2006-04-08 02:09:04.773811000 +0200
+@@ -79,7 +79,7 @@
  	typedef map<string, vector<string> > sentry_t;
  	typedef vector<sentry_t> sresult_t;
  
--	PowerLDAP( const string& host = "127.0.0.1", uint16_t port = LDAP_PORT, bool tls = false );
-+	PowerLDAP( const string& host = "127.0.0.1", u_int16_t port = LDAP_PORT, bool tls = false );
+-	PowerLDAP( const string& hosts = "ldap://127.0.0.1/", uint16_t port = LDAP_PORT, bool tls = false );
++	PowerLDAP( const string& hosts = "ldap://127.0.0.1/", u_int16_t port = LDAP_PORT, bool tls = false );
  	~PowerLDAP();
  
  	void getOption( int option, int* value );
