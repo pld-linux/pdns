@@ -23,7 +23,7 @@ BuildRequires:	flex
 BuildRequires:	libpq++-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	mysql-devel
-BuildRequires:	openldap-devel >= 2.3.0
+BuildRequires:	openldap-devel >= 2.4.6
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
 Requires(post):	sed >= 4.0
