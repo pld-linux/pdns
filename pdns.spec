@@ -2,7 +2,7 @@ Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
 Version:	2.9.21
-Release:	2
+Release:	3
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
@@ -136,12 +136,12 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_initrddir},%{_sysconfdir}/%{name},/etc/sysconfig}
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,%{_sysconfdir}/%{name},/etc/sysconfig}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE3} $RPM_BUILD_ROOT%{_initrddir}/%{name}
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/pdns
 
@@ -177,12 +177,13 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc ChangeLog HACKING INSTALL README TODO pdns.pdf pdns.txt
-%attr(754,root,root) %{_initrddir}/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_sysconfdir}/%{name}
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pdns
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/*
+%dir %{_libdir}/%{name}
 %{_mandir}/man8/*
 
 %files backend-gmysql
