@@ -18,7 +18,7 @@ Patch1:		%{name}-int16.patch
 Patch2:		%{name}-openldap-2.3.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
-BuildRequires:	boost-bind-devel
+BuildRequires:	boost-devel >= 1.35.0
 BuildRequires:	flex
 BuildRequires:	libpq++-devel
 BuildRequires:	libstdc++-devel
