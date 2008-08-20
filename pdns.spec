@@ -114,6 +114,11 @@ LDAP.
 %patch2 -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
+cp %{SOURCE4} .
+
+%if "%{_lib}" == "lib64"
+%{__sed} -i -e 's/module-dir=\/usr\/lib\/pdns/module-dir=\/usr\/lib64\/pdns/' pdns.conf
+%endif
 
 %build
 CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
