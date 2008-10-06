@@ -1,0 +1,380 @@
+diff -Nur pdns-2.9.21.1.orig/pdns/backends/bind/bindbackend2.cc pdns-2.9.21.1.exception/pdns/backends/bind/bindbackend2.cc
+--- pdns-2.9.21.1.orig/pdns/backends/bind/bindbackend2.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/backends/bind/bindbackend2.cc	2008-10-06 10:29:18.000000000 -0600
+@@ -600,7 +600,7 @@
+ 	    L<<Logger::Warning<<d_logprefix<<msg.str()<<endl;
+ 	    rejected++;
+ 	  }
+-	  catch(exception &ae) {
++	  catch(std::exception &ae) {
+ 	    ostringstream msg;
+ 	    msg<<" error at "+nowTime()+" parsing '"<<i->name<<"' from file '"<<i->filename<<"': "<<ae.what();
+ 
+@@ -715,7 +715,7 @@
+     msg<<" error at "+nowTime()+" parsing '"<<bbd->d_name<<"' from file '"<<bbd->d_filename<<"': "<<ae.reason;
+     bbd->d_status=msg.str();
+   }
+-  catch(exception &ae) {
++  catch(std::exception &ae) {
+     ostringstream msg;
+     msg<<" error at "+nowTime()+" parsing '"<<bbd->d_name<<"' from file '"<<bbd->d_filename<<"': "<<ae.what();
+     bbd->d_status=msg.str();
+diff -Nur pdns-2.9.21.1.orig/pdns/backends/bind/zone2sql.cc pdns-2.9.21.1.exception/pdns/backends/bind/zone2sql.cc
+--- pdns-2.9.21.1.orig/pdns/backends/bind/zone2sql.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/backends/bind/zone2sql.cc	2008-10-06 10:29:18.000000000 -0600
+@@ -302,7 +302,7 @@
+     cerr<<"\nFatal error: "<<ae.reason<<endl;
+     return 0;
+   }
+-  catch(exception &e) {
++  catch(std::exception &e) {
+     cerr<<"died because of STL error: "<<e.what()<<endl;
+     exit(0);
+   }
+diff -Nur pdns-2.9.21.1.orig/pdns/communicator.cc pdns-2.9.21.1.exception/pdns/communicator.cc
+--- pdns-2.9.21.1.orig/pdns/communicator.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/communicator.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -461,7 +461,7 @@
+     Utility::sleep(1);
+     exit(0);
+   }
+-  catch(exception &e) {
++  catch(std::exception &e) {
+     L<<Logger::Error<<"Communicator thread died because of STL error: "<<e.what()<<endl;
+     exit(0);
+   }
+diff -Nur pdns-2.9.21.1.orig/pdns/dnsdemog.cc pdns-2.9.21.1.exception/pdns/dnsdemog.cc
+--- pdns-2.9.21.1.orig/pdns/dnsdemog.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnsdemog.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -71,7 +71,7 @@
+ 	  //	cerr<<"error parsing packet: "<<mde.what()<<endl;
+ 	  continue;
+ 	}
+-	catch(exception& e) {
++	catch(std::exception& e) {
+ 	  cerr << e.what() << endl;
+ 	  continue;
+ 	}
+@@ -87,7 +87,7 @@
+   */
+ 
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/dnsgram.cc pdns-2.9.21.1.exception/pdns/dnsgram.cc
+--- pdns-2.9.21.1.orig/pdns/dnsgram.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnsgram.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -148,7 +148,7 @@
+ 	  parseErrors++;
+ 	  continue;
+ 	}
+-	catch(exception& e) {
++	catch(std::exception& e) {
+ 	  cerr << e.what() << endl;
+ 	  continue;
+ 	}
+@@ -177,7 +177,7 @@
+     }
+   }
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/dnspacket.cc pdns-2.9.21.1.exception/pdns/dnspacket.cc
+--- pdns-2.9.21.1.orig/pdns/dnspacket.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnspacket.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -320,7 +320,7 @@
+       }
+       pw.commit();
+     }
+-    catch(exception& e) {
++    catch(std::exception& e) {
+       L<<Logger::Error<<"Exception: "<<e.what()<<endl;
+       throw;
+     }
+@@ -424,7 +424,7 @@
+   qclass=mdp.d_qclass;
+   return 0;
+ }
+-catch(exception& e) {
++catch(std::exception& e) {
+   return -1;
+ }
+ 
+diff -Nur pdns-2.9.21.1.orig/pdns/dnspbench.cc pdns-2.9.21.1.exception/pdns/dnspbench.cc
+--- pdns-2.9.21.1.orig/pdns/dnspbench.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnspbench.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -89,7 +89,7 @@
+   cerr<<"Out: "<<argv[1]<<" IN "<<argv[2]<<" "<<regen->getZoneRepresentation()<<endl;
+ #endif
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Fatal: "<<e.what()<<"\n";
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/dnsproxy.cc pdns-2.9.21.1.exception/pdns/dnsproxy.cc
+--- pdns-2.9.21.1.orig/pdns/dnsproxy.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnsproxy.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -202,7 +202,7 @@
+   catch(AhuException &ae) {
+     L<<Logger::Error<<"Fatal error in DNS proxy: "<<ae.reason<<endl;
+   }
+-  catch(exception &e) {
++  catch(std::exception &e) {
+     L<<Logger::Error<<"Communicator thread died because of STL error: "<<e.what()<<endl;
+   }
+   catch( ... )
+diff -Nur pdns-2.9.21.1.orig/pdns/dnsreplay.cc pdns-2.9.21.1.exception/pdns/dnsreplay.cc
+--- pdns-2.9.21.1.orig/pdns/dnsreplay.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnsreplay.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -255,7 +255,7 @@
+     }
+   }
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Receiver thread died: "<<e.what()<<endl;
+   exit(1);
+@@ -445,7 +445,7 @@
+     receiveFromReference();
+   }
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/dnsreplay-mindex.cc pdns-2.9.21.1.exception/pdns/dnsreplay-mindex.cc
+--- pdns-2.9.21.1.orig/pdns/dnsreplay-mindex.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnsreplay-mindex.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -356,7 +356,7 @@
+   }
+ 
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Receiver thread died: "<<e.what()<<endl;
+   exit(1);
+@@ -579,7 +579,7 @@
+   }
+  out:;
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/dnsscan.cc pdns-2.9.21.1.exception/pdns/dnsscan.cc
+--- pdns-2.9.21.1.orig/pdns/dnsscan.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnsscan.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -78,7 +78,7 @@
+   }
+ 
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cout<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/dnsscope.cc pdns-2.9.21.1.exception/pdns/dnsscope.cc
+--- pdns-2.9.21.1.orig/pdns/dnsscope.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnsscope.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -110,7 +110,7 @@
+ 	dnserrors++;
+ 	continue;
+       }
+-      catch(exception& e) {
++      catch(std::exception& e) {
+ 	if(pw)
+ 	  pw->write();
+ 	bogus++;
+@@ -207,7 +207,7 @@
+   if(totpackets)
+     cerr<<"Average response time: "<<tottime/totpackets<<" usec"<<endl;
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/dnswasher.cc pdns-2.9.21.1.exception/pdns/dnswasher.cc
+--- pdns-2.9.21.1.orig/pdns/dnswasher.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dnswasher.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -74,7 +74,7 @@
+   cerr<<"Saw "<<pr.d_correctpackets<<" correct packets, "<<pr.d_runts<<" runts, "<< pr.d_oversized<<" oversize, "<<
+     pr.d_nonetheripudp<<" unknown encaps"<<endl;
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/dynlistener.cc pdns-2.9.21.1.exception/pdns/dynlistener.cc
+--- pdns-2.9.21.1.orig/pdns/dynlistener.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dynlistener.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -235,7 +235,7 @@
+     {
+       L<<Logger::Error<<"Fatal error 2 in control listener: "<<E<<endl;
+     }
+-  catch(exception& e)
++  catch(std::exception& e)
+     {
+       L<<Logger::Error<<"Fatal STL error: "<<e.what()<<endl;
+     }
+diff -Nur pdns-2.9.21.1.orig/pdns/dynmessenger.cc pdns-2.9.21.1.exception/pdns/dynmessenger.cc
+--- pdns-2.9.21.1.orig/pdns/dynmessenger.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/dynmessenger.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -17,6 +17,7 @@
+     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+ #include "dynmessenger.hh"
++#include <stdlib.h>
+ #include <cstdio>
+ #include <cstring>
+ #include <cerrno>
+diff -Nur pdns-2.9.21.1.orig/pdns/lwres.cc pdns-2.9.21.1.exception/pdns/lwres.cc
+--- pdns-2.9.21.1.orig/pdns/lwres.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/lwres.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -175,7 +175,7 @@
+     return ret;
+     //    return p.getAnswers();
+   }
+-  catch(exception &mde) {
++  catch(std::exception &mde) {
+     if(::arg().mustDo("log-common-errors"))
+       L<<Logger::Notice<<"Unable to parse packet from remote server "<<d_ip.toString()<<": "<<mde.what()<<endl;
+   }
+diff -Nur pdns-2.9.21.1.orig/pdns/pdns_recursor.cc pdns-2.9.21.1.exception/pdns/pdns_recursor.cc
+--- pdns-2.9.21.1.orig/pdns/pdns_recursor.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/pdns_recursor.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -635,7 +635,7 @@
+   catch(MOADNSException& e) {
+     L<<Logger::Error<<"DNS parser error: "<<dc->d_mdp.d_qname<<", "<<e.what()<<endl;
+   }
+-  catch(exception& e) {
++  catch(std::exception& e) {
+     L<<Logger::Error<<"STL error: "<<e.what()<<endl;
+   }
+   catch(...) {
+@@ -847,7 +847,7 @@
+         try {
+ 	   questionExpand(data, len, qname, sizeof(qname), type);  
+         }
+-        catch(exception &e)
++        catch(std::exception &e)
+         {
+            throw MOADNSException(e.what());
+         }
+@@ -1147,7 +1147,7 @@
+     s_rcc.send(answer, &remote);
+     command();
+   }
+-  catch(exception& e) {
++  catch(std::exception& e) {
+     L<<Logger::Error<<"Error dealing with control socket request: "<<e.what()<<endl;
+   }
+   catch(AhuException& ae) {
+@@ -1424,7 +1424,7 @@
+     SyncRes::s_negcache.clear(); 
+     return "ok\n";
+   }
+-  catch(exception& e) {
++  catch(std::exception& e) {
+     L<<Logger::Error<<"Had error reloading zones, keeping original data: "<<e.what()<<endl;
+   }
+   catch(AhuException& ae) {
+@@ -1463,7 +1463,7 @@
+ 	    string tmp=DNSRR2String(rr);
+ 	    rr=String2DNSRR(rr.qname, rr.qtype, tmp, 3600);
+ 	  }
+-	  catch(exception &e) {
++	  catch(std::exception &e) {
+ 	    throw AhuException("Error parsing record '"+rr.qname+"' of type "+rr.qtype.getName()+" in zone '"+headers.first+"' from file '"+headers.second+"': "+e.what());
+ 	  }
+ 	  catch(...) {
+@@ -1883,7 +1883,7 @@
+     L<<Logger::Error<<"Exception: "<<ae.reason<<endl;
+     ret=EXIT_FAILURE;
+   }
+-  catch(exception &e) {
++  catch(std::exception &e) {
+     L<<Logger::Error<<"STL Exception: "<<e.what()<<endl;
+     ret=EXIT_FAILURE;
+   }
+diff -Nur pdns-2.9.21.1.orig/pdns/rcpgenerator.cc pdns-2.9.21.1.exception/pdns/rcpgenerator.cc
+--- pdns-2.9.21.1.orig/pdns/rcpgenerator.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/rcpgenerator.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -434,7 +434,7 @@
+   cout<<"Regenerated: '"<<out<<"'\n";
+   
+ }
+-catch(exception& e)
++catch(std::exception& e)
+ {
+   cerr<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/receiver.cc pdns-2.9.21.1.exception/pdns/receiver.cc
+--- pdns-2.9.21.1.orig/pdns/receiver.cc	2008-08-07 01:02:53.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/receiver.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -567,7 +567,7 @@
+       cerr<<"Exiting because: "<<AE.reason<<endl;
+     L<<Logger::Error<<"Exiting because: "<<AE.reason<<endl;
+   }      
+-  catch(exception &e) {
++  catch(std::exception &e) {
+     if(!arg().mustDo("daemon"))
+       cerr<<"Exiting because of STL error: "<<e.what()<<endl;
+     L<<Logger::Error<<"Exiting because of STL error: "<<e.what()<<endl;
+diff -Nur pdns-2.9.21.1.orig/pdns/sdig.cc pdns-2.9.21.1.exception/pdns/sdig.cc
+--- pdns-2.9.21.1.orig/pdns/sdig.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/sdig.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -55,7 +55,7 @@
+   }
+ 
+ }
+-catch(exception &e)
++catch(std::exception &e)
+ {
+   cerr<<"Fatal: "<<e.what()<<endl;
+ }
+diff -Nur pdns-2.9.21.1.orig/pdns/tcpreceiver.cc pdns-2.9.21.1.exception/pdns/tcpreceiver.cc
+--- pdns-2.9.21.1.orig/pdns/tcpreceiver.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/tcpreceiver.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -322,7 +322,7 @@
+     s_P = 0; // on next call, backend will be recycled
+     L<<Logger::Error<<"TCP nameserver had error, cycling backend: "<<ae.reason<<endl;
+   }
+-  catch(exception &e) {
++  catch(std::exception &e) {
+     L<<Logger::Error<<"TCP Connection Thread died because of STL error: "<<e.what()<<endl;
+   }
+   catch( ... )
+diff -Nur pdns-2.9.21.1.orig/pdns/webserver.cc pdns-2.9.21.1.exception/pdns/webserver.cc
+--- pdns-2.9.21.1.orig/pdns/webserver.cc	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.exception/pdns/webserver.cc	2008-10-06 10:44:05.000000000 -0600
+@@ -170,7 +170,7 @@
+   catch(Exception &e) {
+     L<<Logger::Error<<"Exception in webserver: "<<e.reason<<endl;
+   }
+-  catch(exception &e) {
++  catch(std::exception &e) {
+     L<<Logger::Error<<"STL Exception in webserver: "<<e.what()<<endl;
+   }
+   catch(...) {
+@@ -214,7 +214,7 @@
+   catch(Exception &e) {
+     L<<Logger::Error<<"Fatal error in main webserver thread: "<<e.reason<<endl;
+   }
+-  catch(exception &e) {
++  catch(std::exception &e) {
+     L<<Logger::Error<<"STL Exception in main webserver thread: "<<e.what()<<endl;
+   }
+   catch(...) {
