@@ -16,6 +16,8 @@ Source5:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-int16.patch
 Patch2:		%{name}-openldap-2.3.patch
+Patch3:		%{name}-strerror.patch
+Patch4:		%{name}-stdlib.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.35.0
@@ -23,6 +25,7 @@ BuildRequires:	flex
 BuildRequires:	libpq++-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	mysql-devel
+BuildRequires:	sqlite3-devel
 BuildRequires:	openldap-devel >= 2.4.6
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
@@ -94,6 +97,19 @@ This package allows zone storage in MySQL relational db tables.
 Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
 relacyjnej bazy danych MySQL.
 
+%package backend-gsqlite3
+Summary:	PowerDNS support for Sqlite3
+Summary(pl.UTF-8):	Wsparcie PowerDNS dla baz Sqlite3
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description backend-gsqlite3
+This package allows zone storage in Sqlite3 relational db tables.
+
+%description backend-gsqlite3 -l pl.UTF-8
+Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
+relacyjnej bazy danych Sqlite3.
+
 %package backend-ldap
 Summary:	PowerDNS support for LDAP
 Summary(pl.UTF-8):	Wsparcie PowerDNS dla baz LDAP
@@ -112,6 +128,8 @@ LDAP.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 cp %{SOURCE4} .
@@ -126,14 +144,17 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 	--libdir=%{_libdir}/%{name} \
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--with-socketdir=/var/run \
-	--with-dynmodules="gmysql gpgsql pipe ldap" \
+	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
 	--with-modules="" \
 	--enable-mysql \
 	--enable-pgsql \
+	--enable-sqlite3 \
 	--with-pgsql-lib=%{_libdir} \
 	--with-pgsql-includes=%{_includedir} \
 	--with-mysql-lib=%{_libdir} \
 	--with-mysql-includes=%{_includedir} \
+	--with-sqlite3-lib=%{_libdir} \
+	--with-sqlite3-includes=%{_includedir} \
 	--enable-ldap \
 	--disable-static
 
@@ -198,6 +219,10 @@ fi
 %files backend-gpgsql
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*pgsql*.so*
+
+%files backend-gsqlite3
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/%{name}/*sqlite3*.so*
 
 %files backend-pipe
 %defattr(644,root,root,755)
