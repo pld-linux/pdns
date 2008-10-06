@@ -1,0 +1,11 @@
+diff -Nur pdns-2.9.21.1.orig/pdns/misc.hh pdns-2.9.21.1.strerror/pdns/misc.hh
+--- pdns-2.9.21.1.orig/pdns/misc.hh	2007-04-21 07:56:36.000000000 -0600
++++ pdns-2.9.21.1.strerror/pdns/misc.hh	2008-10-06 10:04:51.000000000 -0600
+@@ -19,6 +19,7 @@
+ #ifndef MISC_HH
+ #define MISC_HH
+ #include <stdint.h>
++#include <string.h>
+ 
+ #if 0
+ #define RDTSC(qp) \
