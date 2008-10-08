@@ -25,9 +25,10 @@ BuildRequires:	flex
 BuildRequires:	libpq++-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	mysql-devel
-BuildRequires:	sqlite3-devel
 BuildRequires:	openldap-devel >= 2.4.6
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	sed >= 4.0
+BuildRequires:	sqlite3-devel
 BuildRequires:	zlib-devel
 Requires(post):	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
