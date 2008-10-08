@@ -57,7 +57,7 @@ i przełączania w wypadku awarii.
 
 %package backend-pipe
 Summary:	PowerDNS support for custom pipe backend
-Summary(pl.UTF-8):	Wsparcie PowerDNS dla własnego mechanizmu przechowywania stref
+Summary(pl.UTF-8):	Obsługa własnego mechanizmu przechowywania stref dla PowerDNS-a
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -73,7 +73,7 @@ Perlu został dołączony do dokumentacji pakietu.
 
 %package backend-gpgsql
 Summary:	PowerDNS support for PostgreSQL
-Summary(pl.UTF-8):	Wsparcie PowerDNS dla baz PostgresQL
+Summary(pl.UTF-8):	Obsługa baz PostgreSQL dla PowerDNS-a
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -86,7 +86,7 @@ relacyjnej bazy danych PostgreSQL.
 
 %package backend-gmysql
 Summary:	PowerDNS support for MySQL
-Summary(pl.UTF-8):	Wsparcie PowerDNS dla baz MySQL
+Summary(pl.UTF-8):	Obsługa baz MySQL dla PowerDNS-a
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -98,21 +98,21 @@ Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
 relacyjnej bazy danych MySQL.
 
 %package backend-gsqlite3
-Summary:	PowerDNS support for Sqlite3
-Summary(pl.UTF-8):	Wsparcie PowerDNS dla baz Sqlite3
+Summary:	PowerDNS support for SQLite 3
+Summary(pl.UTF-8):	Obsługa baz SQLite 3 dla PowerDNS-a
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description backend-gsqlite3
-This package allows zone storage in Sqlite3 relational db tables.
+This package allows zone storage in SQLite 3 relational db tables.
 
 %description backend-gsqlite3 -l pl.UTF-8
 Ten pakiet pozwala na przechowywanie danych o strefach w tabelach
-relacyjnej bazy danych Sqlite3.
+relacyjnej bazy danych SQLite 3.
 
 %package backend-ldap
 Summary:	PowerDNS support for LDAP
-Summary(pl.UTF-8):	Wsparcie PowerDNS dla baz LDAP
+Summary(pl.UTF-8):	Obsługa LDAP dla PowerDNS-a
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -134,8 +134,8 @@ cp %{SOURCE1} .
 cp %{SOURCE2} .
 cp %{SOURCE4} .
 
-%if "%{_lib}" == "lib64"
-%{__sed} -i -e 's/module-dir=\/usr\/lib\/pdns/module-dir=\/usr\/lib64\/pdns/' pdns.conf
+%if "%{_lib}" != "lib"
+%{__sed} -i -e 's/module-dir=\/usr\/lib\/pdns/module-dir=\/usr\/%{_lib}\/pdns/' pdns.conf
 %endif
 
 %build
@@ -143,20 +143,20 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 %configure \
 	--libdir=%{_libdir}/%{name} \
 	--sysconfdir=%{_sysconfdir}/%{name} \
-	--with-socketdir=/var/run \
-	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
-	--with-modules="" \
+	--disable-static \
+	--enable-ldap \
 	--enable-mysql \
 	--enable-pgsql \
 	--enable-sqlite3 \
-	--with-pgsql-lib=%{_libdir} \
 	--with-pgsql-includes=%{_includedir} \
-	--with-mysql-lib=%{_libdir} \
+	--with-pgsql-lib=%{_libdir} \
 	--with-mysql-includes=%{_includedir} \
-	--with-sqlite3-lib=%{_libdir} \
+	--with-mysql-lib=%{_libdir} \
 	--with-sqlite3-includes=%{_includedir} \
-	--enable-ldap \
-	--disable-static
+	--with-sqlite3-lib=%{_libdir} \
+	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
+	--with-modules="" \
+	--with-socketdir=/var/run
 
 %{__make}
 
