@@ -19,6 +19,9 @@ Patch2:		%{name}-openldap-2.3.patch
 Patch3:		%{name}-strerror.patch
 Patch4:		%{name}-stdlib.patch
 URL:		http://www.powerdns.com/
+# http://doc.powerdns.com/powerdns-advisory-2008-03.html
+# Upgrade to 2.9.21.2:
+BuildRequires:	security(SA-2008-02)
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.35.0
 BuildRequires:	flex
