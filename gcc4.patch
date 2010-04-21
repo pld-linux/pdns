@@ -1,0 +1,20 @@
+--- pdns-2.9.22/pdns/rcpgenerator.cc.orig	2010-04-14 23:40:51.208359588 +0200
++++ pdns-2.9.22/pdns/rcpgenerator.cc	2010-04-14 23:42:06.531685676 +0200
+@@ -21,6 +21,7 @@
+ #include "misc.hh"
+ #include <boost/lexical_cast.hpp>
+ #include <iostream>
++#include <cstdio>
+ #include "base64.hh"
+ using namespace boost;
+ 
+--- pdns-2.9.22/pdns/dnsparser.cc.orig	2010-04-14 23:44:22.735837950 +0200
++++ pdns-2.9.22/pdns/dnsparser.cc	2010-04-14 23:44:37.368336270 +0200
+@@ -20,6 +20,7 @@
+ #include "dnswriter.hh"
+ #include <boost/lexical_cast.hpp>
+ #include <boost/algorithm/string.hpp>
++#include <cstdio>
+ 
+ using namespace boost;
+ 

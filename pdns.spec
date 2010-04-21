@@ -16,6 +16,7 @@ Source5:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-int16.patch
 Patch2:		%{name}-openldap-2.3.patch
+Patch3:		gcc4.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.35.0
@@ -127,6 +128,7 @@ LDAP.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 cp %{SOURCE4} .
