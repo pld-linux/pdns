@@ -1,28 +1,32 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	2.9.22
-Release:	4
+Version:	3.0
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	8a6ff842733aca885577eb54e983a1ff
+# Source0-md5:	dce3855707a1a02c1d1893242f33960a
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
 # Source1-md5:	cb69cd9655e4cb319c66adb2c733314d
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
-Patch0:		%{name}-configure.patch
+Patch0:		configure.ac.patch
 Patch1:		%{name}-int16.patch
 Patch2:		%{name}-openldap-2.3.patch
 Patch3:		gcc4.patch
 URL:		http://www.powerdns.com/
+BuildRequires:	autoconf >= 2.52
+BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.35.0
 BuildRequires:	flex
 BuildRequires:	libpq++-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtool
+BuildRequires:	lua51-devel
 BuildRequires:	mysql-devel
 BuildRequires:	openldap-devel >= 2.4.6
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -139,20 +143,19 @@ cp %{SOURCE4} .
 
 %build
 CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
+%{__libtoolize}
+%{__aclocal} -I .
+%{__autoconf}
+%{__automake}
 %configure \
 	--libdir=%{_libdir}/%{name} \
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--disable-static \
-	--enable-ldap \
-	--enable-mysql \
-	--enable-pgsql \
-	--enable-sqlite3 \
+	--with-lua \
 	--with-pgsql-includes=%{_includedir} \
 	--with-pgsql-lib=%{_libdir} \
 	--with-mysql-includes=%{_includedir} \
 	--with-mysql-lib=%{_libdir} \
-	--with-sqlite3-includes=%{_includedir} \
-	--with-sqlite3-lib=%{_libdir} \
 	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
 	--with-modules="" \
 	--with-socketdir=/var/run
