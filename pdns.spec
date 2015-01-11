@@ -1,33 +1,33 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	3.3
-Release:	3
+Version:	3.4.1
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	73932211fe9895e02dc60713fe12c005
+Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
+# Source0-md5:	3259505caeaae2a5e9baf3255be437ff
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
 # Source1-md5:	cb69cd9655e4cb319c66adb2c733314d
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
-Patch0:		configure.ac.patch
-Patch1:		%{name}-int16.patch
-Patch2:		%{name}-openldap-2.3.patch
+Patch0:		%{name}-int16.patch
+Patch1:		%{name}-openldap-2.3.patch
 URL:		http://www.powerdns.com/
-BuildRequires:	autoconf >= 2.52
-BuildRequires:	automake
+BuildRequires:	autoconf >= 2.61
+BuildRequires:	automake >= 1.11
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.35.0
 BuildRequires:	flex
 BuildRequires:	libpq++-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
-BuildRequires:	lua51-devel
+BuildRequires:	lua-devel >= 5.1
 BuildRequires:	mysql-devel
 BuildRequires:	openldap-devel >= 2.4.6
+BuildRequires:	polarssl-devel >= 1.1
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	sqlite3-devel
@@ -130,7 +130,6 @@ LDAP.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 cp %{SOURCE4} .
@@ -146,7 +145,6 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 %{__autoconf}
 %{__automake}
 %configure \
-	--libdir=%{_libdir}/%{name} \
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--disable-static \
 	--with-lua \
@@ -156,6 +154,7 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 	--with-mysql-lib=%{_libdir} \
 	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
 	--with-modules="" \
+	--with-system-polarssl \
 	--with-socketdir=/var/run
 
 %{__make}
@@ -167,9 +166,9 @@ install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,%{_sysconfdir}/%{name},/etc/sysconfi
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/pdns
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
+cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/pdns
 
 # useless - modules are dlopened by *.so
 rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
@@ -202,7 +201,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc HACKING INSTALL README TODO pdns.pdf pdns.txt
+%doc INSTALL README pdns.pdf pdns.txt
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_sysconfdir}/%{name}
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
@@ -215,14 +214,23 @@ fi
 %files backend-gmysql
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*mysql*.so*
+%{_docdir}/pdns/dnssec-3.x_to_3.4.0_schema.mysql.sql
+%{_docdir}/pdns/nodnssec-3.x_to_3.4.0_schema.mysql.sql
+%{_docdir}/pdns/schema.mysql.sql
 
 %files backend-gpgsql
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*pgsql*.so*
+%{_docdir}/pdns/dnssec-3.x_to_3.4.0_schema.pgsql.sql
+%{_docdir}/pdns/nodnssec-3.x_to_3.4.0_schema.pgsql.sql
+%{_docdir}/pdns/schema.pgsql.sql
 
 %files backend-gsqlite3
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/*sqlite3*.so*
+%{_docdir}/pdns/dnssec-3.x_to_3.4.0_schema.sqlite3.sql
+%{_docdir}/pdns/nodnssec-3.x_to_3.4.0_schema.sqlite3.sql
+%{_docdir}/pdns/schema.sqlite3.sql
 
 %files backend-pipe
 %defattr(644,root,root,755)
