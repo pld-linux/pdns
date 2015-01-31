@@ -2,7 +2,7 @@ Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
 Version:	3.4.1
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
@@ -171,7 +171,10 @@ cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
 cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/pdns
 
 # useless - modules are dlopened by *.so
-rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
+%{__rm} -f $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
+
+# we put that in using %doc
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -213,24 +216,18 @@ fi
 
 %files backend-gmysql
 %defattr(644,root,root,755)
+%doc modules/gmysqlbackend/*schema.mysql.sql
 %attr(755,root,root) %{_libdir}/%{name}/*mysql*.so*
-%{_docdir}/pdns/dnssec-3.x_to_3.4.0_schema.mysql.sql
-%{_docdir}/pdns/nodnssec-3.x_to_3.4.0_schema.mysql.sql
-%{_docdir}/pdns/schema.mysql.sql
 
 %files backend-gpgsql
 %defattr(644,root,root,755)
+%doc modules/gpgsqlbackend/*schema.pgsql.sql
 %attr(755,root,root) %{_libdir}/%{name}/*pgsql*.so*
-%{_docdir}/pdns/dnssec-3.x_to_3.4.0_schema.pgsql.sql
-%{_docdir}/pdns/nodnssec-3.x_to_3.4.0_schema.pgsql.sql
-%{_docdir}/pdns/schema.pgsql.sql
 
 %files backend-gsqlite3
 %defattr(644,root,root,755)
+%doc modules/gsqlite3backend/*schema.sqlite3.sql
 %attr(755,root,root) %{_libdir}/%{name}/*sqlite3*.so*
-%{_docdir}/pdns/dnssec-3.x_to_3.4.0_schema.sqlite3.sql
-%{_docdir}/pdns/nodnssec-3.x_to_3.4.0_schema.sqlite3.sql
-%{_docdir}/pdns/schema.sqlite3.sql
 
 %files backend-pipe
 %defattr(644,root,root,755)
