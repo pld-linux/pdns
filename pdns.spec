@@ -1,12 +1,12 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	3.4.1
-Release:	2
+Version:	3.4.2
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	3259505caeaae2a5e9baf3255be437ff
+# Source0-md5:	3f79de4d0bc845fb3d4b492234daf1a4
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
 # Source1-md5:	cb69cd9655e4cb319c66adb2c733314d
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
@@ -209,10 +209,18 @@ fi
 %dir %{_sysconfdir}/%{name}
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pdns
-%attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_sbindir}/pdns_server
+%attr(755,root,root) %{_bindir}/pdns_control
+%attr(755,root,root) %{_bindir}/pdnssec
+%attr(755,root,root) %{_bindir}/zone2json
+%attr(755,root,root) %{_bindir}/zone2ldap
+%attr(755,root,root) %{_bindir}/zone2sql
 %dir %{_libdir}/%{name}
-%{_mandir}/man8/*
+%{_mandir}/man1/pdns_control.1*
+%{_mandir}/man1/pdns_server.1*
+%{_mandir}/man1/pdnssec.1*
+%{_mandir}/man1/zone2ldap.1*
+%{_mandir}/man1/zone2sql.1*
 
 %files backend-gmysql
 %defattr(644,root,root,755)
