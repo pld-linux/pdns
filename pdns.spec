@@ -1,6 +1,7 @@
 # TODO
 # - warning: Installed (but unpackaged) file(s) found:
 #   /etc/pdns/pdns.conf-dist
+# - do not use 'djbdns' group!
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
