@@ -44,89 +44,94 @@ doPC() {
 doPC ping
 NOTRUNNING=$?
 
-RETVAL=0
-case "$1" in
-  status)
-	status pdns_server
-	exit $?
-	;;
-  stop)
-	if test "$NOTRUNNING" = "0"; then
-		msg_stopping "PowerDNS"
-		doPC quit 2>&1 >/dev/null
-		[ $? -eq 0 ] && ok || fail
-		rm /var/lock/subsys/pdns
-	else
-		msg_not_running "PowerDNS"
-	fi
-	;;
-  force-stop)
-	run_cmd "Killing PowerDNS without grace" killall -v -9 pdns_server
-	;;
-  start)
+start() {
 	if test "$NOTRUNNING" = "0"; then
 		msg_already_running "PowerDNS"
-	else
-		msg_starting "PowerDNS (Powered DNS server)"
-		daemon $pdns_server --daemon --guardian=yes
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pdns
+		return
 	fi
-	;;
-  restart)
-	$0 stop
+
+	msg_starting "PowerDNS (Powered DNS server)"
+	daemon $pdns_server --daemon --guardian=yes
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pdns
+}
+
+stop() {
+	if test "$NOTRUNNING" != "0"; then
+		msg_not_running "PowerDNS"
+		return
+	fi
+
+	msg_stopping "PowerDNS"
+	doPC quit 2>&1 >/dev/null
+	[ $? -eq 0 ] && ok || fail
+	rm /var/lock/subsys/pdns
+}
+
+restart() {
+	stop
 	run_cmd "PowerDNS (3 sec. timeout)" sleep 3
-	$0 start
-	exit $?
-	;;
-  reload|force-reload)
-	if test "$NOTRUNNING" = "0"; then
-		show "Reloading PowerDNS"
-		doPC cycle 2>&1 >/dev/null
-		if [ $? -eq 0 ]; then
-			ok
-		else
-			fail
-			RETVAL=1
-		fi
-	else
+	start
+}
+
+reload() {
+	if test "$NOTRUNNING" != "0"; then
 		msg_not_running "PowerDNS" >&2
-		exit 7
+		RETVAL=7
+		return
 	fi
-	;;
-  monitor)
+
+	show "Reloading PowerDNS"
+	doPC cycle 2>&1 >/dev/null
+	if [ $? -eq 0 ]; then
+		ok
+	else
+		fail
+		RETVAL=1
+	fi
+}
+
+monitor() {
 	if test "$NOTRUNNING" = "0"; then
 		msg_already_running "PowerDNS"
-	else
-		show "PowerDNS in foreground (testing mode)"
-		$pdns_server --daemon=no --guardian=no --control-console --loglevel=9
+		return
 	fi
-	;;
-  dump)
-	if test "$NOTRUNNING" = "0"; then
-		doPC list
-		echo $ret
-	else
+
+	show "PowerDNS in foreground (testing mode)"
+	$pdns_server --daemon=no --guardian=no --control-console --loglevel=9
+}
+
+dump() {
+	if test "$NOTRUNNING" != "0"; then
 		msg_not_running "PowerDNS"
+		return
 	fi
-	;;
-  show)
+
+	doPC list
+	echo $ret
+}
+
+show() {
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
-		exit 2
+		RETVAL=2
+		return
 	fi
+
 	if test "$NOTRUNNING" = "0"; then
 		echo -n "$2="
 		doPC show $2 ; echo $ret
 	else
 		msg_not_running "PowerDNS"
 	fi
-	;;
-  mrtg)
+}
+
+mrtg() {
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
-		exit 2
+		RETVAL=2
 	fi
+
 	if test "$NOTRUNNING" = "0"; then
 		doPC show $2 ; echo $ret
 		if [ "$3x" != "x" ]; then
@@ -140,18 +145,56 @@ case "$1" in
 		msg_not_running "PowerDNS" >&2
 		exit 7
 	fi
-	;;
-  cricket)
+}
+
+cricket() {
 	if [ $# -lt 2 ]; then
 		msg_usage "$0 {show|mrtg|cricket} <variable_name_from_pdns_dump>"
-		exit 2
+		RETVAL=2
 	fi
+
 	if test "$NOTRUNNING" = "0"; then
 		doPC show $2 ; echo $ret
 	else
 		msg_not_running "PowerDNS" >&2
 		exit 7
 	fi
+}
+
+RETVAL=0
+case "$1" in
+  stop)
+	stop
+	;;
+  force-stop)
+	run_cmd "Killing PowerDNS without grace" killall -v -9 pdns_server
+	;;
+  start)
+	start
+	;;
+  restart)
+	restart
+	;;
+  reload|force-reload)
+	reload
+	;;
+  monitor)
+	monitor
+	;;
+  dump)
+	dump
+	;;
+  show)
+	show "$@"
+	;;
+  mrtg)
+	mrtg "$@"
+	;;
+  cricket)
+	cricket "$@"
+	;;
+  status)
+	status pdns_server
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status|dump|show|mrtg|cricket|monitor} [...]"
