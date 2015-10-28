@@ -1,12 +1,15 @@
+# TODO
+# - warning: Installed (but unpackaged) file(s) found:
+#   /etc/pdns/pdns.conf-dist
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	3.4.2
-Release:	3
+Version:	3.4.6
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	3f79de4d0bc845fb3d4b492234daf1a4
+# Source0-md5:	1d44709f07bc62dabdaa34d67c894de5
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
 # Source1-md5:	cb69cd9655e4cb319c66adb2c733314d
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
@@ -145,6 +148,7 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 %{__autoconf}
 %{__automake}
 %configure \
+	--disable-silent-rules \
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--disable-static \
 	--with-lua \
