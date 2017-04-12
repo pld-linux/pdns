@@ -5,19 +5,18 @@
 Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	3.4.6
-Release:	2
+Version:	4.0.3
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	1d44709f07bc62dabdaa34d67c894de5
+# Source0-md5:	bbb1ebed50edc0f2127d6c4331c1429a
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
-# Source1-md5:	cb69cd9655e4cb319c66adb2c733314d
+# Source1-md5:	c7f3884185358e59d208e166eddb246c
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
-Patch0:		%{name}-int16.patch
 Patch1:		%{name}-openldap-2.3.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	autoconf >= 2.61
@@ -32,10 +31,11 @@ BuildRequires:	lua-devel >= 5.1
 BuildRequires:	mysql-devel
 BuildRequires:	openldap-devel >= 2.4.6
 BuildRequires:	polarssl-devel >= 1.1
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	sed >= 4.0
 BuildRequires:	sqlite3-devel
 BuildRequires:	zlib-devel
+Requires(post,preun,postun):	systemd-units >= 38
 Requires(post):	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -45,6 +45,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	rc-scripts
+Requires:	systemd-units >= 0.38
 Provides:	group(djbdns)
 Provides:	nameserver
 Provides:	user(pdns)
@@ -132,7 +133,6 @@ LDAP.
 
 %prep
 %setup -q
-%patch0 -p1
 %patch1 -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
@@ -160,9 +160,10 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
 	--with-modules="" \
 	--with-system-polarssl \
-	--with-socketdir=/var/run
+	--with-socketdir=/var/run \
+	--with-systemd=%{systemdunitdir}
 
-%{__make} -j1
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -189,6 +190,7 @@ rm -rf $RPM_BUILD_ROOT
 %useradd -u 30 -d /var/lib/pdns -s /bin/false -c "pdns User" -g djbdns pdns
 
 %post
+%systemd_post %{name}.service
 # dirty hack so the config file is processed correctly, and server does not respawn
 sed -i -e 's/^ *//' /etc/pdns/pdns.conf
 
@@ -200,12 +202,14 @@ if [ "$1" = "0" ]; then
 	%service pdns stop
 	/sbin/chkconfig --del pdns
 fi
+%systemd_preun %{name}.service
 
 %postun
 if [ "$1" = "0" ]; then
 	%userremove pdns
 	%groupremove djbdns
 fi
+%systemd_reload
 
 %files
 %defattr(644,root,root,755)
@@ -214,16 +218,36 @@ fi
 %dir %{_sysconfdir}/%{name}
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pdns
+%{systemdunitdir}/pdns.service
+%{systemdunitdir}/pdns@.service
 %attr(755,root,root) %{_sbindir}/pdns_server
+%attr(755,root,root) %{_bindir}/dnspcap2protobuf
 %attr(755,root,root) %{_bindir}/pdns_control
-%attr(755,root,root) %{_bindir}/pdnssec
+%attr(755,root,root) %{_bindir}/pdnsutil
 %attr(755,root,root) %{_bindir}/zone2json
 %attr(755,root,root) %{_bindir}/zone2ldap
 %attr(755,root,root) %{_bindir}/zone2sql
 %dir %{_libdir}/%{name}
+%{_mandir}/man1/calidns.1*
+%{_mandir}/man1/dnsbulktest.1*
+%{_mandir}/man1/dnsgram.1*
+%{_mandir}/man1/dnspcap2protobuf.1*
+%{_mandir}/man1/dnsreplay.1*
+%{_mandir}/man1/dnsscan.1*
+%{_mandir}/man1/dnsscope.1*
+%{_mandir}/man1/dnstcpbench.1*
+%{_mandir}/man1/dnswasher.1*
+%{_mandir}/man1/dumresp.1*
+%{_mandir}/man1/ixplore.1*
+%{_mandir}/man1/nproxy.1*
+%{_mandir}/man1/nsec3dig.1*
 %{_mandir}/man1/pdns_control.1*
+%{_mandir}/man1/pdns_notify.1*
 %{_mandir}/man1/pdns_server.1*
-%{_mandir}/man1/pdnssec.1*
+%{_mandir}/man1/pdnsutil.1*
+%{_mandir}/man1/saxfr.1*
+%{_mandir}/man1/sdig.1*
+%{_mandir}/man1/zone2json.1*
 %{_mandir}/man1/zone2ldap.1*
 %{_mandir}/man1/zone2sql.1*
 
