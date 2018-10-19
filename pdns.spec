@@ -6,8 +6,8 @@ Summary:	PowerDNS is a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
 Version:	4.0.3
-Release:	5
-License:	GPL
+Release:	6
+License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
 # Source0-md5:	bbb1ebed50edc0f2127d6c4331c1429a
@@ -20,20 +20,24 @@ Source5:	%{name}.sysconfig
 Patch1:		%{name}-openldap-2.3.patch
 URL:		http://www.powerdns.com/
 BuildRequires:	autoconf >= 2.61
-BuildRequires:	automake >= 1.11
+BuildRequires:	automake >= 1:1.11
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.35.0
 BuildRequires:	flex
 BuildRequires:	libpq++-devel
-BuildRequires:	libstdc++-devel
-BuildRequires:	libtool
+BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	libtool >= 2:2.2.2
 BuildRequires:	lua-devel >= 5.1
 BuildRequires:	mysql-devel
 BuildRequires:	openldap-devel >= 2.4.6
+BuildRequires:	openssl-devel
+BuildRequires:	pkgconfig
 BuildRequires:	polarssl-devel >= 1.1
+BuildRequires:	postgresql-devel
+BuildRequires:	protobuf-devel
 BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	sed >= 4.0
-BuildRequires:	sqlite3-devel
+BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	zlib-devel
 Requires(post,preun,postun):	systemd-units >= 38
 Requires(post):	sed >= 4.0
@@ -149,18 +153,18 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 %{__autoconf}
 %{__automake}
 %configure \
-	--disable-silent-rules \
 	--sysconfdir=%{_sysconfdir}/%{name} \
+	--disable-silent-rules \
 	--disable-static \
+	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
 	--with-lua \
-	--with-pgsql-includes=%{_includedir} \
-	--with-pgsql-lib=%{_libdir} \
+	--with-modules="" \
 	--with-mysql-includes=%{_includedir} \
 	--with-mysql-lib=%{_libdir} \
-	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
-	--with-modules="" \
-	--with-system-polarssl \
+	--with-pgsql-includes=%{_includedir} \
+	--with-pgsql-lib=%{_libdir} \
 	--with-socketdir=/var/run \
+	--with-system-polarssl \
 	--with-systemd=%{systemdunitdir}
 
 %{__make}
