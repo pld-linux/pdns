@@ -2,15 +2,15 @@
 # - warning: Installed (but unpackaged) file(s) found:
 #   /etc/pdns/pdns.conf-dist
 # - do not use 'djbdns' group!
-Summary:	PowerDNS is a Versatile Database Driven Nameserver
-Summary(pl.UTF-8):	PowerDNS to wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
+Summary:	PowerDNS - a Versatile Database Driven Nameserver
+Summary(pl.UTF-8):	PowerDNS - wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	4.0.3
-Release:	7
+Version:	4.0.7
+Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	bbb1ebed50edc0f2127d6c4331c1429a
+# Source0-md5:	bd2363e7b82b7d095a4eb66b9cd528df
 Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
 # Source1-md5:	c7f3884185358e59d208e166eddb246c
 Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
@@ -138,9 +138,9 @@ LDAP.
 %prep
 %setup -q
 %patch1 -p1
-cp %{SOURCE1} .
-cp %{SOURCE2} .
-cp %{SOURCE4} .
+cp -p %{SOURCE1} .
+cp -p %{SOURCE2} .
+cp -p %{SOURCE4} .
 
 %if "%{_lib}" != "lib"
 %{__sed} -i -e 's/module-dir=\/usr\/lib\/pdns/module-dir=\/usr\/%{_lib}\/pdns/' pdns.conf
