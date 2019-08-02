@@ -5,20 +5,20 @@
 Summary:	PowerDNS - a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS - wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	4.0.7
+Version:	4.0.9
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
-Source0:	http://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	bd2363e7b82b7d095a4eb66b9cd528df
-Source1:	http://downloads.powerdns.com/documentation/%{name}.pdf
+Source0:	https://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
+# Source0-md5:	906aa90e95b194dcd773627b298787be
+Source1:	https://downloads.powerdns.com/documentation/%{name}.pdf
 # Source1-md5:	c7f3884185358e59d208e166eddb246c
-Source2:	http://downloads.powerdns.com/documentation/%{name}.txt
+Source2:	https://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
 Patch1:		%{name}-openldap-2.3.patch
-URL:		http://www.powerdns.com/
+URL:		https://www.powerdns.com/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	bison
@@ -218,7 +218,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc INSTALL README pdns.pdf pdns.txt
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/pdns
 %dir %{_sysconfdir}/%{name}
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pdns
