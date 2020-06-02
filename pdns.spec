@@ -156,6 +156,7 @@ CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--disable-silent-rules \
 	--disable-static \
+	--enable-tools \
 	--with-dynmodules="gsqlite3 gmysql gpgsql pipe ldap" \
 	--with-lua \
 	--with-modules="" \
@@ -225,19 +226,50 @@ fi
 %{systemdunitdir}/pdns.service
 %{systemdunitdir}/pdns@.service
 %attr(755,root,root) %{_sbindir}/pdns_server
+%attr(755,root,root) %{_bindir}/calidns
+%attr(755,root,root) %{_bindir}/dnsbulktest
+%attr(755,root,root) %{_bindir}/dnsgram
+%attr(755,root,root) %{_bindir}/dnspcap2calidns
 %attr(755,root,root) %{_bindir}/dnspcap2protobuf
+%attr(755,root,root) %{_bindir}/dnsreplay
+%attr(755,root,root) %{_bindir}/dnsscan
+%attr(755,root,root) %{_bindir}/dnsscope
+%attr(755,root,root) %{_bindir}/dnstcpbench
+%attr(755,root,root) %{_bindir}/dnswasher
+%attr(755,root,root) %{_bindir}/dumresp
+%attr(755,root,root) %{_bindir}/ixplore
+%attr(755,root,root) %{_bindir}/nproxy
+%attr(755,root,root) %{_bindir}/nsec3dig
 %attr(755,root,root) %{_bindir}/pdns_control
+%attr(755,root,root) %{_bindir}/pdns_notify
 %attr(755,root,root) %{_bindir}/pdnsutil
+%attr(755,root,root) %{_bindir}/saxfr
+%attr(755,root,root) %{_bindir}/sdig
+%attr(755,root,root) %{_bindir}/stubquery
 %attr(755,root,root) %{_bindir}/zone2json
 %attr(755,root,root) %{_bindir}/zone2ldap
 %attr(755,root,root) %{_bindir}/zone2sql
 %dir %{_libdir}/%{name}
+%{_mandir}/man1/calidns.1*
 %{_mandir}/man1/dnsbulktest.1*
+%{_mandir}/man1/dnsgram.1*
+%{_mandir}/man1/dnspcap2calidns.1*
 %{_mandir}/man1/dnspcap2protobuf.1*
+%{_mandir}/man1/dnsreplay.1*
+%{_mandir}/man1/dnsscan.1*
+%{_mandir}/man1/dnsscope.1*
 %{_mandir}/man1/dnstcpbench.1*
+%{_mandir}/man1/dnswasher.1*
+%{_mandir}/man1/dumresp.1*
+%{_mandir}/man1/ixplore.1*
+%{_mandir}/man1/nproxy.1*
+%{_mandir}/man1/nsec3dig.1*
 %{_mandir}/man1/pdns_control.1*
+%{_mandir}/man1/pdns_notify.1*
 %{_mandir}/man1/pdns_server.1*
 %{_mandir}/man1/pdnsutil.1*
+%{_mandir}/man1/saxfr.1*
+%{_mandir}/man1/sdig.1*
 %{_mandir}/man1/zone2json.1*
 %{_mandir}/man1/zone2ldap.1*
 %{_mandir}/man1/zone2sql.1*
