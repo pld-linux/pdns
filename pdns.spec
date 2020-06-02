@@ -5,14 +5,14 @@
 Summary:	PowerDNS - a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS - wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	4.0.9
-Release:	3
+Version:	4.3.0
+Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	https://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	906aa90e95b194dcd773627b298787be
+# Source0-md5:	b7a65b58d3ac9e2ef39571a41fdfe268
 Source1:	https://downloads.powerdns.com/documentation/%{name}.pdf
-# Source1-md5:	c7f3884185358e59d208e166eddb246c
+# Source1-md5:	15bdde9d84af6ef1485dc2f5fa3f81df
 Source2:	https://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
@@ -232,25 +232,12 @@ fi
 %attr(755,root,root) %{_bindir}/zone2ldap
 %attr(755,root,root) %{_bindir}/zone2sql
 %dir %{_libdir}/%{name}
-%{_mandir}/man1/calidns.1*
 %{_mandir}/man1/dnsbulktest.1*
-%{_mandir}/man1/dnsgram.1*
 %{_mandir}/man1/dnspcap2protobuf.1*
-%{_mandir}/man1/dnsreplay.1*
-%{_mandir}/man1/dnsscan.1*
-%{_mandir}/man1/dnsscope.1*
 %{_mandir}/man1/dnstcpbench.1*
-%{_mandir}/man1/dnswasher.1*
-%{_mandir}/man1/dumresp.1*
-%{_mandir}/man1/ixplore.1*
-%{_mandir}/man1/nproxy.1*
-%{_mandir}/man1/nsec3dig.1*
 %{_mandir}/man1/pdns_control.1*
-%{_mandir}/man1/pdns_notify.1*
 %{_mandir}/man1/pdns_server.1*
 %{_mandir}/man1/pdnsutil.1*
-%{_mandir}/man1/saxfr.1*
-%{_mandir}/man1/sdig.1*
 %{_mandir}/man1/zone2json.1*
 %{_mandir}/man1/zone2ldap.1*
 %{_mandir}/man1/zone2sql.1*
