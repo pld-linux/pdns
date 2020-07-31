@@ -1,0 +1,42 @@
+--- pdns-4.3.0/pdns/webserver.cc.orig	2020-02-25 07:57:13.000000000 +0100
++++ pdns-4.3.0/pdns/webserver.cc	2020-07-31 22:22:55.140035772 +0200
+@@ -107,7 +107,7 @@
+ 
+ void WebServer::registerBareHandler(const string& url, HandlerFunction handler)
+ {
+-  YaHTTP::THandlerFunction f = boost::bind(&bareHandlerWrapper, handler, _1, _2);
++  YaHTTP::THandlerFunction f = boost::bind(&bareHandlerWrapper, handler, boost::placeholders::_1, boost::placeholders::_2);
+   YaHTTP::Router::Any(url, f);
+ }
+ 
+@@ -179,7 +179,7 @@
+ }
+ 
+ void WebServer::registerApiHandler(const string& url, HandlerFunction handler, bool allowPassword) {
+-  HandlerFunction f = boost::bind(&WebServer::apiWrapper, this, handler, _1, _2, allowPassword);
++  HandlerFunction f = boost::bind(&WebServer::apiWrapper, this, handler, boost::placeholders::_1, boost::placeholders::_2, allowPassword);
+   registerBareHandler(url, f);
+ }
+ 
+@@ -196,7 +196,7 @@
+ }
+ 
+ void WebServer::registerWebHandler(const string& url, HandlerFunction handler) {
+-  HandlerFunction f = boost::bind(&WebServer::webWrapper, this, handler, _1, _2);
++  HandlerFunction f = boost::bind(&WebServer::webWrapper, this, handler, boost::placeholders::_1, boost::placeholders::_2);
+   registerBareHandler(url, f);
+ }
+ 
+--- pdns-4.3.0/pdns/ws-auth.cc.orig	2020-03-21 03:38:01.000000000 +0100
++++ pdns-4.3.0/pdns/ws-auth.cc	2020-07-31 22:32:10.629153686 +0200
+@@ -2328,8 +2328,8 @@
+       d_ws->registerApiHandler("/api", &apiDiscovery);
+     }
+     if (::arg().mustDo("webserver")) {
+-      d_ws->registerWebHandler("/style.css", boost::bind(&AuthWebServer::cssfunction, this, _1, _2));
+-      d_ws->registerWebHandler("/", boost::bind(&AuthWebServer::indexfunction, this, _1, _2));
++      d_ws->registerWebHandler("/style.css", boost::bind(&AuthWebServer::cssfunction, this, boost::placeholders::_1, boost::placeholders::_2));
++      d_ws->registerWebHandler("/", boost::bind(&AuthWebServer::indexfunction, this, boost::placeholders::_1, boost::placeholders::_2));
+     }
+     d_ws->go();
+   }
