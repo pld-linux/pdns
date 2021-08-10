@@ -9,4 +9,4 @@ diff -uNr pdns-3.0/modules/ldapbackend/powerldap.hh pdns-3.0.new/modules/ldapbac
 +#define LDAP_DEPRECATED 1
  #include <ldap.h>
  
- #ifdef HAVE_CONFIG_H
+ using std::list;
