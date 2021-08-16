@@ -19,6 +19,7 @@ Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
 Patch0:		%{name}-boost.patch
 Patch1:		%{name}-openldap-2.3.patch
+Patch2:		gcc11.patch
 URL:		https://www.powerdns.com/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1:1.11
@@ -140,6 +141,7 @@ LDAP.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 cp -p %{SOURCE1} .
 cp -p %{SOURCE2} .
 cp -p %{SOURCE4} .
