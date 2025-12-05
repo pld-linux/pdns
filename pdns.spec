@@ -12,7 +12,7 @@ Group:		Networking/Daemons
 Source0:	https://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
 # Source0-md5:	abb1b5dc525ca94edc9d7f6e558c888a
 Source1:	https://downloads.powerdns.com/documentation/%{name}.pdf
-# Source1-md5:	8835511a1478fb372d99688e4195e6f8
+# Source1-md5:	df7da083e3ba8fe8c1fb472b81a23c15
 Source2:	https://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
