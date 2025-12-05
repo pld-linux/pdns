@@ -145,7 +145,10 @@ cp -p %{SOURCE4} .
 %endif
 
 %build
-#CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
+%ifarch %{ix86}
+export CFLAGS="%{rpmcflags} -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64"
+export CXXFLAGS="%{rpmcflags} -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64"
+%endif
 %configure \
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--disable-silent-rules \
