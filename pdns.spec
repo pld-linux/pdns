@@ -5,21 +5,18 @@
 Summary:	PowerDNS - a Versatile Database Driven Nameserver
 Summary(pl.UTF-8):	PowerDNS - wielofunkcyjny serwer nazw korzystający z relacyjnych baz danych
 Name:		pdns
-Version:	4.3.2
-Release:	10
+Version:	5.0.1
+Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	https://downloads.powerdns.com/releases/%{name}-%{version}.tar.bz2
-# Source0-md5:	ad4eee6cb66b94b2d23b7a7b0f4cc824
+# Source0-md5:	abb1b5dc525ca94edc9d7f6e558c888a
 Source1:	https://downloads.powerdns.com/documentation/%{name}.pdf
-# Source1-md5:	15bdde9d84af6ef1485dc2f5fa3f81df
+# Source1-md5:	8835511a1478fb372d99688e4195e6f8
 Source2:	https://downloads.powerdns.com/documentation/%{name}.txt
 Source3:	%{name}.init
 Source4:	%{name}.conf
 Source5:	%{name}.sysconfig
-Patch0:		%{name}-boost.patch
-Patch1:		%{name}-openldap-2.3.patch
-Patch2:		gcc11.patch
 URL:		https://www.powerdns.com/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1:1.11
@@ -139,9 +136,6 @@ LDAP.
 
 %prep
 %setup -q
-%patch -P0 -p1
-%patch -P1 -p1
-%patch -P2 -p1
 cp -p %{SOURCE1} .
 cp -p %{SOURCE2} .
 cp -p %{SOURCE4} .
@@ -151,11 +145,7 @@ cp -p %{SOURCE4} .
 %endif
 
 %build
-CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
-%{__libtoolize}
-%{__aclocal} -I .
-%{__autoconf}
-%{__automake}
+#CPPFLAGS="-DHAVE_NAMESPACE_STD -DHAVE_CXX_STRING_HEADER -DDLLIMPORT=\"\""
 %configure \
 	--sysconfdir=%{_sysconfdir}/%{name} \
 	--disable-silent-rules \
